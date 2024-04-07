@@ -1,34 +1,34 @@
 package com.webshop.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
-
+import java.util.List;
+@Entity
 public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "category_name")
     private String CategoryName;
 
+
     public Category() {
+        this(1L,"");
     }
 
-    public Category(int id, String categoryName) {
+    public Category(Long id, String categoryName) {
         this.id = id;
         this.CategoryName = categoryName;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,4 +39,6 @@ public class Category implements Serializable {
     public void setCategoryName(String categoryName) {
         this.CategoryName = categoryName;
     }
+
+
 }
