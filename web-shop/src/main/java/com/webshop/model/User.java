@@ -48,23 +48,9 @@ public class User implements Serializable {
     private Boolean Blocked;
 
     public User() {
-        this(Long.valueOf(""),"","","","","","",LocalDate.MIN,"default.jpg","bio",Role.CUSTOMER,false);
+        this(1L,"","","","","","",LocalDate.MIN,"default.jpg","bio",Role.CUSTOMER,false);
     }
 
-    public User(Long id, String name, String lastName, String username, String email, String phoneNumber, String password) {
-        this.id = id;
-        this.Name = name;
-        this.LastName = lastName;
-        this.Username = username;
-        this.Email = email;
-        this.PhoneNumber = phoneNumber;
-        this.Password = password;
-        this.DateOfBirth = LocalDate.of(2001,12,12);
-        this.ImagePath = "/images/user.jpg";
-        this.Description = "bio";
-        this.UserRole = Role.CUSTOMER;
-        this.Blocked = false;
-    }
 
     public User(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked) {
         this.id = id;
