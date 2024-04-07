@@ -52,15 +52,18 @@ public class Product implements Serializable {
     @Column(name = "is_sold")
     private Boolean isSold;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "product_type")
+    private ProductType productType;
 
     public Product() {
 
-        this(1L,"","","default.jpg",1.0,SalesType.FIXED_PRICE,LocalDate.MIN,new Category(),new ArrayList<>(),false,false,false);
+        this(1L,"","","default.jpg",1.0,SalesType.FIXED_PRICE,LocalDate.MIN,new Category(),new ArrayList<>(),false,false,false,ProductType.FOR_SALE);
     }
 
     public Product(Long id, String name, String description, String imagePath,
                    Double price, SalesType salesType, LocalDate releaseDate, Category category,
-                   List<Offer> offers, Boolean customerReview, Boolean sellerReview, Boolean isSold) {
+                   List<Offer> offers, Boolean customerReview, Boolean sellerReview, Boolean isSold,ProductType productType) {
         this.id = id;
         this.Name = name;
         this.Description = description;
@@ -73,6 +76,7 @@ public class Product implements Serializable {
         this.CustomerReview = customerReview;
         this.SellerReview = sellerReview;
         this.isSold = isSold;
+        this.productType=productType;
     }
 
     public Product(String name, String description, Double price,
@@ -182,6 +186,14 @@ public class Product implements Serializable {
         this.isSold = sold;
     }
 
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -197,6 +209,7 @@ public class Product implements Serializable {
                 ", CustomerReview=" + CustomerReview +
                 ", SellerReview=" + SellerReview +
                 ", isSold=" + isSold +
+                ", ProductType=" + productType +
                 '}';
     }
 }
