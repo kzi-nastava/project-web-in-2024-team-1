@@ -1,0 +1,78 @@
+package com.webshop.model;
+
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.util.Date;
+
+@Entity
+public class Review implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    private int Rating;
+
+    @Column
+    private String Comment;
+
+    @Column
+    private Date ReviewDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User Reviewer;
+
+    public Review() {
+        this(1L,1,"",new Date(0),new User());
+    }
+
+    public Review(Long id, int Rating, String Comment, Date ReviewDate, User Reviewer) {
+        this.id = id;
+        this.Rating = Rating;
+        this.Comment = Comment;
+        this.ReviewDate = ReviewDate;
+        this.Reviewer = Reviewer;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getRating() {
+        return Rating;
+    }
+
+    public void setRating(int rating) {
+        Rating = rating;
+    }
+
+    public String getComment() {
+        return Comment;
+    }
+
+    public void setComment(String comment) {
+        Comment = comment;
+    }
+
+    public Date getReviewDate() {
+        return ReviewDate;
+    }
+
+    public void setReviewDate(Date reviewDate) {
+        ReviewDate = reviewDate;
+    }
+
+    public User getReviewer() {
+        return Reviewer;
+    }
+
+    public void setReviewer(User reviewer) {
+        Reviewer = reviewer;
+    }
+}
