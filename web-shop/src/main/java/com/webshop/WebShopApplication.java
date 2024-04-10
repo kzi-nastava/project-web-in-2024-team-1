@@ -1,7 +1,5 @@
 package com.webshop;
 
-import com.webshop.model.Employee;
-import com.webshop.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
