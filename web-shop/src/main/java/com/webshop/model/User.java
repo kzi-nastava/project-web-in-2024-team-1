@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User implements Serializable {
@@ -47,12 +49,35 @@ public class User implements Serializable {
     @Column(name = "blocked")
     private Boolean Blocked;
 
+    @OneToMany(mappedBy = "user")
+    private List<Product> ProductList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Review> ReviewList;
+
+    @Column(name="anverage_rating")
+    private double AverageRating;
+
     public User() {
-        this(1L,"","","","","","",LocalDate.MIN,"default.jpg","bio",Role.CUSTOMER,false);
+        this.id = 1L;
+        this.Name = "";
+        this.LastName = "";
+        this.Username = "";
+        this.Email = "";
+        this.PhoneNumber = "";
+        this.Password = "";
+        this.DateOfBirth = LocalDate.MIN;
+        this.ImagePath = "default.jpg";
+        this.Description = "bio";
+        this.UserRole = Role.CUSTOMER;
+        this.Blocked = false;
+        this.ProductList = new ArrayList<>();
+        this.ReviewList = new ArrayList<>();
+        this.AverageRating = 1.0;
     }
 
 
-    public User(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked) {
+    public User(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, List<Product> productList, List<Review> rewievsList, Double averageRating ) {
         this.id = id;
         this.Name = name;
         this.LastName = lastName;
@@ -65,6 +90,9 @@ public class User implements Serializable {
         this.Description = description;
         this.UserRole = userRole;
         this.Blocked = blocked;
+        this.ProductList = productList;
+        this.ReviewList = rewievsList;
+        this.AverageRating = averageRating;
     }
 
     public void setId(Long id) {
@@ -163,6 +191,18 @@ public class User implements Serializable {
         this.Blocked = blocked;
     }
 
+    public List<Product> getProductList() {return ProductList;}
+
+    public void setProductList(List<Product> productList) {this.ProductList = productList;}
+
+    public List<Review> getReviewList() {return ReviewList;}
+
+    public void setReviewList(List<Review> reviewList) {this.ReviewList = reviewList;}
+
+    public double getAverageRating() {return AverageRating;}
+
+    public void setAverageRating(double averageRating) {this.AverageRating = averageRating;}
+
     @Override
     public String toString() {
         return "User{" +
@@ -178,6 +218,9 @@ public class User implements Serializable {
                 ", Description='" + Description + '\'' +
                 ", UserRole=" + UserRole +
                 ", Blocked=" + Blocked +
+                ", ProductList=" + ProductList +
+                ", ReviewList=" + ReviewList +
+                ", AverageRating=" + AverageRating +
                 '}';
     }
 }
