@@ -38,7 +38,7 @@ public class Product implements Serializable {
     private LocalDate ReleaseDate;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -67,7 +67,7 @@ public class Product implements Serializable {
     }
 
     public Product(Long id, String name, String description, String imagePath,
-                   Double price, SalesType salesType, LocalDate releaseDate, Category category,
+                   Double price, SalesType salesType, LocalDate releaseDate,Category category,
                    List<Offer> offers,Boolean customerReview, Boolean sellerReview, Boolean isSold,ProductType productType) {
         this.id = id;
         this.Name = name;
@@ -85,13 +85,12 @@ public class Product implements Serializable {
     }
 
     public Product(String name, String description, Double price,
-                   SalesType salesType, LocalDate releaseDate, Category category, String imagePath) {
+                   SalesType salesType, LocalDate releaseDate, String imagePath) {
         this.Name = name;
         this.Description = description;
         this.Price = price;
         this.salesType = salesType;
         this.ReleaseDate = releaseDate;
-        this.category = category;
         this.ImagePath = imagePath;
     }
 
