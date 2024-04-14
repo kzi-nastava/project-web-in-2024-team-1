@@ -1,10 +1,7 @@
 package com.webshop;
 
 import com.webshop.model.*;
-import com.webshop.repository.CategoryRepository;
-import com.webshop.repository.OfferRepository;
-import com.webshop.repository.ProductRepository;
-import com.webshop.repository.AccountRepository;
+import com.webshop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,6 +18,10 @@ public class WebShopApplication implements CommandLineRunner {
 	 */
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private ReportUserRepository reportUserRepository;
+	@Autowired
+	private ReviewRepository reviewRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired

@@ -25,11 +25,10 @@ public class Review implements Serializable {
     private Account user;
 
     public Review() {
-        this(1L,1,"",new Date(0),new Account());
+        this(1,"",new Date(0),new Account());
     }
 
-    public Review(Long id, int Rating, String Comment, Date ReviewDate, Account user) {
-        this.id = id;
+    public Review(int Rating, String Comment, Date ReviewDate, Account user) {
         this.Rating = Rating;
         this.Comment = Comment;
         this.ReviewDate = ReviewDate;

@@ -18,11 +18,11 @@ public class ReportUser implements Serializable {
     private Date ReportDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn
     private Account reportingUser;
 
     @ManyToOne
-    @JoinColumn(name = "reporter_id")
+    @JoinColumn
     private Account reportedUser;
 
     @Enumerated(EnumType.STRING)
@@ -30,7 +30,6 @@ public class ReportUser implements Serializable {
     private ReportStatus status;
 
     public ReportUser() {
-        this.id = 1L;
         this.Reason = "";
         this.ReportDate = new Date(0);
         this.reportingUser = new Account();
@@ -38,8 +37,7 @@ public class ReportUser implements Serializable {
         this.status = ReportStatus.SUBMITTED;
     }
 
-    public ReportUser(Long id, String reason, Date reportDate, Account reportingUser, Account reportedUser, ReportStatus status) {
-        this.id = id;
+    public ReportUser(String reason, Date reportDate, Account reportingUser, Account reportedUser, ReportStatus status) {
         this.Reason = reason;
         this.ReportDate = reportDate;
         this.reportingUser = reportingUser;
