@@ -22,13 +22,13 @@ public class Review implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User Reviewer;
+    private Account Reviewer;
 
     public Review() {
-        this(1L,1,"",new Date(0),new User());
+        this(1L,1,"",new Date(0),new Account());
     }
 
-    public Review(Long id, int Rating, String Comment, Date ReviewDate, User Reviewer) {
+    public Review(Long id, int Rating, String Comment, Date ReviewDate, Account Reviewer) {
         this.id = id;
         this.Rating = Rating;
         this.Comment = Comment;
@@ -68,11 +68,11 @@ public class Review implements Serializable {
         ReviewDate = reviewDate;
     }
 
-    public User getReviewer() {
+    public Account getReviewer() {
         return Reviewer;
     }
 
-    public void setReviewer(User reviewer) {
+    public void setReviewer(Account reviewer) {
         Reviewer = reviewer;
     }
 }

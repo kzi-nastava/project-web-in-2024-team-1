@@ -8,57 +8,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class User implements Serializable {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Account implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column
     private String Name;
 
-    @Column(name = "last_name")
+    @Column
     private String LastName;
 
-    @Column(name = "username", unique = true)
+    @Column(unique = true)
     private String Username;
 
-    @Column(name = "email", unique = true)
+    @Column(unique = true)
     private String Email;
 
-    @Column(name = "phone_number")
+    @Column
     private String PhoneNumber;
 
-    @Column(name = "password")
+    @Column
     private String Password;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "date_of_birth")
+    @Column
     private LocalDate DateOfBirth;
 
-    @Column(name = "image_path")
+    @Column
     private String ImagePath;
 
-    @Column(name = "description")
+    @Column
     private String Description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column
     private Role UserRole;
 
-    @Column(name = "blocked")
+    @Column
     private Boolean Blocked;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "account_id",cascade =CascadeType.ALL)
     private List<Product> ProductList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "account_id",cascade =CascadeType.ALL)
     private List<Review> ReviewList;
 
-    @Column(name="anverage_rating")
+    @Column
     private double AverageRating;
 
-    public User() {
+    public Account() {
         this.id = 1L;
         this.Name = "";
         this.LastName = "";
@@ -77,7 +78,7 @@ public class User implements Serializable {
     }
 
 
-    public User(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, List<Product> productList, List<Review> rewievsList, Double averageRating ) {
+    public Account(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, List<Product> productList, List<Review> rewievsList, Double averageRating ) {
         this.id = id;
         this.Name = name;
         this.LastName = lastName;
