@@ -18,11 +18,11 @@ public class ReportUser implements Serializable {
     private Date ReportDate;
 
     @ManyToOne
-    @JoinColumn(name = "reportinguser_id")
+    @JoinColumn(name = "user_id")
     private Account reportingUser;
 
     @ManyToOne
-    @JoinColumn(name = "reporteduser_id")
+    @JoinColumn(name = "reporter_id")
     private Account reportedUser;
 
     @Enumerated(EnumType.STRING)

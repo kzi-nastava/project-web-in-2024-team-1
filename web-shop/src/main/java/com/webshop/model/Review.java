@@ -22,18 +22,18 @@ public class Review implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Account Reviewer;
+    private Account user;
 
     public Review() {
         this(1L,1,"",new Date(0),new Account());
     }
 
-    public Review(Long id, int Rating, String Comment, Date ReviewDate, Account Reviewer) {
+    public Review(Long id, int Rating, String Comment, Date ReviewDate, Account user) {
         this.id = id;
         this.Rating = Rating;
         this.Comment = Comment;
         this.ReviewDate = ReviewDate;
-        this.Reviewer = Reviewer;
+        this.user = user;
     }
 
     public Long getId() {
@@ -69,10 +69,10 @@ public class Review implements Serializable {
     }
 
     public Account getReviewer() {
-        return Reviewer;
+        return user;
     }
 
     public void setReviewer(Account reviewer) {
-        Reviewer = reviewer;
+        user = reviewer;
     }
 }
