@@ -1,5 +1,7 @@
 package com.webshop;
 
+import com.webshop.model.Account;
+import com.webshop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,28 +19,26 @@ public class WebShopApplication implements CommandLineRunner {
 	   inace bi pozivi bili u npr. nekom od servisa.
 	 */
 	@Autowired
-	private EmployeeRepository employeeRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public void run(String... args) {
 
 		// kreiramo novi objekat klase Employee
-		Employee employee = new Employee();
-		employee.setFirstName("Jovanka");
-		employee.setLastName("Jovkić");
-		employee.setPosition("radnik");
+		Account newUser = new Account();
+		newUser.setName("hello");
 
 		// čuvamo objekat u bazi
-		this.employeeRepository.save(employee);
+		userRepository.save(newUser);
 
-		List<Employee> employees = this.employeeRepository.findAll();
+		List<Account> users = this.userRepository.findAll();
 //		List<Employee> employees = this.employeeRepository.findAllByPositionOrderByFirstName("radnik");
 //		List<Employee> employees = this.employeeRepository.findByFirstNameOrLastName("Aleksandar", "Milić");
 //		List<Employee> employees = this.employeeRepository.findByFirstNameIgnoreCase("jovanka");
 //		List<Employee> employees = this.employeeRepository.findByDepartmentName("Menadžment");
 
-		for (Employee e : employees){
-			System.out.println(e);
+		for (Account user : users){
+			System.out.println(users);
 		}
 	}
 

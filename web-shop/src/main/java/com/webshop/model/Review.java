@@ -11,29 +11,29 @@ public class Review implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "rating")
     private int Rating;
 
-    @Column
+    @Column(name = "comment")
     private String Comment;
 
-    @Column
+    @Column(name = "reviw_date")
     private Date ReviewDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User Reviewer;
+    private Account user;
 
     public Review() {
-        this(1L,1,"",new Date(0),new User());
+        this(1L,1,"",new Date(0),new Account());
     }
 
-    public Review(Long id, int Rating, String Comment, Date ReviewDate, User Reviewer) {
+    public Review(Long id, int Rating, String Comment, Date ReviewDate, Account user) {
         this.id = id;
         this.Rating = Rating;
         this.Comment = Comment;
         this.ReviewDate = ReviewDate;
-        this.Reviewer = Reviewer;
+        this.user = user;
     }
 
     public Long getId() {
@@ -68,11 +68,11 @@ public class Review implements Serializable {
         ReviewDate = reviewDate;
     }
 
-    public User getReviewer() {
-        return Reviewer;
+    public Account getReviewer() {
+        return user;
     }
 
-    public void setReviewer(User reviewer) {
-        Reviewer = reviewer;
+    public void setReviewer(Account reviewer) {
+        user = reviewer;
     }
 }

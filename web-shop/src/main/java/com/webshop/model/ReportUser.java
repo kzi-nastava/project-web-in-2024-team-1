@@ -11,19 +11,19 @@ public class ReportUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "reason")
     private String Reason;
 
-    @Column
+    @Column(name = "report_date")
     private Date ReportDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User reportingUser;
+    private Account reportingUser;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User reportedUser;
+    @JoinColumn(name = "reporter_id")
+    private Account reportedUser;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -33,12 +33,12 @@ public class ReportUser implements Serializable {
         this.id = 1L;
         this.Reason = "";
         this.ReportDate = new Date(0);
-        this.reportingUser = new User();
-        this.reportedUser = new User();
+        this.reportingUser = new Account();
+        this.reportedUser = new Account();
         this.status = ReportStatus.SUBMITTED;
     }
 
-    public ReportUser(Long id, String reason, Date reportDate, User reportingUser, User reportedUser, ReportStatus status) {
+    public ReportUser(Long id, String reason, Date reportDate, Account reportingUser, Account reportedUser, ReportStatus status) {
         this.id = id;
         this.Reason = reason;
         this.ReportDate = reportDate;
@@ -71,19 +71,19 @@ public class ReportUser implements Serializable {
         this.ReportDate = reportDate;
     }
 
-    public User getReportingUser() {
+    public Account getReportingUser() {
         return reportingUser;
     }
 
-    public void setReportingUser(User reportingUser) {
+    public void setReportingUser(Account reportingUser) {
         this.reportingUser = reportingUser;
     }
 
-    public User getReportedUser() {
+    public Account getReportedUser() {
         return reportedUser;
     }
 
-    public void setReportedUser(User reportedUser) {
+    public void setReportedUser(Account reportedUser) {
         this.reportedUser = reportedUser;
     }
 

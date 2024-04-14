@@ -40,7 +40,7 @@ public class Product implements Serializable {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Offer> offers;
 
     @Column(name = "customer_review")
@@ -63,7 +63,7 @@ public class Product implements Serializable {
 
     public Product(Long id, String name, String description, String imagePath,
                    Double price, SalesType salesType, LocalDate releaseDate, Category category,
-                   List<Offer> offers, Boolean customerReview, Boolean sellerReview, Boolean isSold,ProductType productType) {
+                   List<Offer> offers, Boolean customerReview, Boolean sellerReview, Boolean isSold, ProductType productType) {
         this.id = id;
         this.Name = name;
         this.Description = description;
@@ -193,6 +193,7 @@ public class Product implements Serializable {
     public void setProductType(ProductType productType) {
         this.productType = productType;
     }
+
 
     @Override
     public String toString() {

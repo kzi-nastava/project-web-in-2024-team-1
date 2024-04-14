@@ -52,4 +52,5 @@ public class Offer implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
+
 }
