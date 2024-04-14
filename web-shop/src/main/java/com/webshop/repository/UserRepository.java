@@ -1,7 +1,7 @@
 package com.webshop.repository;
 
-import com.webshop.model.User;
+import com.webshop.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Account, Long> {
 }
