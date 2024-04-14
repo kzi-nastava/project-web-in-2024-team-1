@@ -68,6 +68,7 @@ public class Account implements Serializable {
     private double averageRating;
 
     public Account() {
+
         this.name = "";
         this.lastName = "";
         this.username = "";
@@ -92,6 +93,7 @@ public class Account implements Serializable {
         this.userRole = userRole;
         this.blocked = blocked;
         this.averageRating = averageRating;
+
     }
 
     public void setId(Long id) {

@@ -2,13 +2,16 @@ package com.webshop;
 
 import com.webshop.model.*;
 import com.webshop.repository.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
+
 import java.util.Date;
+
 import java.util.List;
 
 /*
@@ -21,11 +24,13 @@ public class WebShopApplication implements CommandLineRunner {
 	   inace bi pozivi bili u npr. nekom od servisa.
 	 */
 	@Autowired
+
 	private UserRepository accountRepository;
 	@Autowired
 	private ReportUserRepository reportUserRepository;
 	@Autowired
 	private ReviewRepository reviewRepository;
+
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -132,6 +137,7 @@ public class WebShopApplication implements CommandLineRunner {
 		for (ReportUser reportUser: reportUserRepository.findAll()) {
 
 			System.out.println(reportUser.toString());
+
 		}
 	}
 

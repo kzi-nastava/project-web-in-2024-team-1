@@ -20,6 +20,7 @@ public class Offer implements Serializable {
     //@JoinColumn(name = "product_id")
     //private Product product;
 
+
     @Enumerated(EnumType.STRING)
     @Column
     private Role role;
