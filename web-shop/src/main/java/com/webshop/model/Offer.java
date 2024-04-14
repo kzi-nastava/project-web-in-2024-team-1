@@ -13,20 +13,22 @@ public class Offer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "price_offer")
+    @Column
     private Double PriceOffer;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column
     private Role role;
 
     public Offer() {
-        this(1L,1.0,Role.CUSTOMER);
+        this(1.0, Role.CUSTOMER);
     }
 
-    public Offer(Long id, Double priceOffer, Role role) {
-        this.id = id;
+    public Offer(Double priceOffer, Role role) {
         this.PriceOffer = priceOffer;
         this.role = role;
     }
@@ -53,5 +55,14 @@ public class Offer implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "id=" + id +
+                ", PriceOffer=" + PriceOffer +
+                ", role=" + role +
+                '}';
     }
 }

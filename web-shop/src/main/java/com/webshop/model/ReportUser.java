@@ -26,25 +26,19 @@ public class ReportUser implements Serializable {
     private Account reportedUser;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ReportStatus reportingStatus;
+    @Column
+    private ReportStatus status;
 
     public ReportUser() {
-        this.id = 1L;
         this.Reason = "";
         this.ReportDate = new Date(0);
-        this.reportingUser = new Account();
-        this.reportedUser = new Account();
-        this.reportingStatus = ReportStatus.SUBMITTED;
+        this.status = ReportStatus.SUBMITTED;
     }
 
-    public ReportUser(Long id, String reason, Date reportDate, Account reportingUser, Account reportedUser, ReportStatus status) {
-        this.id = id;
+    public ReportUser(String reason, Date reportDate, ReportStatus status) {
         this.Reason = reason;
         this.ReportDate = reportDate;
-        this.reportingUser = reportingUser;
-        this.reportedUser = reportedUser;
-        this.reportingStatus= status;
+        this.status = status;
     }
 
     public Long getId() {
@@ -88,10 +82,10 @@ public class ReportUser implements Serializable {
     }
 
     public ReportStatus getStatus() {
-        return reportingStatus;
+        return status;
     }
 
     public void setStatus(ReportStatus status) {
-        this.reportingStatus = status;
+        this.status = status;
     }
 }

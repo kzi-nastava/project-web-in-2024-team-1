@@ -20,20 +20,18 @@ public class Review implements Serializable {
     @Column
     private Date ReviewDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Account user;
 
     public Review() {
-        this(1L,1,"",new Date(0),new Account());
+        this(1,"", new Date(0));
     }
 
-    public Review(Long id, int Rating, String Comment, Date ReviewDate, Account user) {
-        this.id = id;
+    public Review(int Rating, String Comment, Date ReviewDate) {
         this.Rating = Rating;
         this.Comment = Comment;
         this.ReviewDate = ReviewDate;
-        this.user = user;
     }
 
     public Long getId() {
