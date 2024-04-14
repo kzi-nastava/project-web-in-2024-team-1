@@ -37,14 +37,14 @@ public class Product implements Serializable {
     @Column
     private LocalDate ReleaseDate;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "OFFERS",
-            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "offer_id", referencedColumnName = "id")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "PRODUCT_OFFERS",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "offer_id")
     )
     private List<Offer> offers;
 
@@ -62,36 +62,16 @@ public class Product implements Serializable {
     private ProductType productType;
 
     public Product() {
-
-        this(1L,"","","default.jpg",1.0,SalesType.FIXED_PRICE,LocalDate.MIN,null,new ArrayList<>(),false,false,false,ProductType.FOR_SALE);
-    }
-
-    public Product(Long id, String name, String description, String imagePath,
-                   Double price, SalesType salesType, LocalDate releaseDate, Category category,
-                   List<Offer> offers,Boolean customerReview, Boolean sellerReview, Boolean isSold,ProductType productType) {
-        this.id = id;
-        this.Name = name;
-        this.Description = description;
-        this.ImagePath = imagePath;
-        this.Price = price;
-        this.salesType = salesType;
-        this.ReleaseDate = releaseDate;
-        this.category = category;
-        this.offers=offers;
-        this.CustomerReview = customerReview;
-        this.SellerReview = sellerReview;
-        this.isSold = isSold;
-        this.productType=productType;
+        this("", "", 1.0, SalesType.FIXED_PRICE, LocalDate.now(), "");
     }
 
     public Product(String name, String description, Double price,
-                   SalesType salesType, LocalDate releaseDate, Category category, String imagePath) {
+                   SalesType salesType, LocalDate releaseDate, String imagePath) {
         this.Name = name;
         this.Description = description;
         this.Price = price;
         this.salesType = salesType;
         this.ReleaseDate = releaseDate;
-        this.category = category;
         this.ImagePath = imagePath;
     }
 

@@ -68,7 +68,6 @@ public class Account implements Serializable {
     private double AverageRating;
 
     public Account() {
-        this.id = 1L;
         this.Name = "";
         this.LastName = "";
         this.Username = "";
@@ -80,14 +79,11 @@ public class Account implements Serializable {
         this.Description = "bio";
         this.UserRole = Role.CUSTOMER;
         this.Blocked = false;
-        this.ProductList = new ArrayList<>();
-        this.ReviewList = new ArrayList<>();
         this.AverageRating = 1.0;
     }
 
 
-    public Account(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, List<Product> productList, List<Review> rewievsList, Double averageRating ) {
-        this.id = id;
+    public Account(String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, Double averageRating) {
         this.Name = name;
         this.LastName = lastName;
         this.Username = username;
@@ -99,8 +95,6 @@ public class Account implements Serializable {
         this.Description = description;
         this.UserRole = userRole;
         this.Blocked = blocked;
-        this.ProductList = productList;
-        this.ReviewList = rewievsList;
         this.AverageRating = averageRating;
     }
 
