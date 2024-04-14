@@ -50,10 +50,18 @@ public class Account implements Serializable {
     @Column
     private Boolean Blocked;
 
-    @OneToMany(mappedBy = "account_id",cascade =CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "ACCOUNT_PRODUCTS",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id")
+    )
     private List<Product> ProductList;
 
-    @OneToMany(mappedBy = "account_id",cascade =CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "ACCOUNT_REVIEWS",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id")
+    )
     private List<Review> ReviewList;
 
     @Column
