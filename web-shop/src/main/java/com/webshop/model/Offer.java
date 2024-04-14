@@ -2,9 +2,11 @@ package com.webshop.model;
 
 import jakarta.persistence.*;
 
+import java.beans.ConstructorProperties;
 import java.io.Serializable;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Offer implements Serializable {
 
     @Id
@@ -52,5 +54,4 @@ public class Offer implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
-
 }

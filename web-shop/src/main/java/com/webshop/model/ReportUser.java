@@ -11,10 +11,10 @@ public class ReportUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "reason")
+    @Column
     private String Reason;
 
-    @Column(name = "report_date")
+    @Column
     private Date ReportDate;
 
     @ManyToOne

@@ -10,50 +10,55 @@ import java.util.List;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column
     private String Name;
 
-    @Column(name = "description")
+    @Column
     private String Description;
 
-    @Column(name = "image_path")
+    @Column
     private String ImagePath;
 
-    @Column(name = "price")
+    @Column
     private Double Price;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sales_type",nullable = false)
+    @Column
     private SalesType salesType;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "release_date")
+    @Column
     private LocalDate ReleaseDate;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn
     private Category category;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "OFFERS",
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "offer_id", referencedColumnName = "id")
+    )
     private List<Offer> offers;
 
-    @Column(name = "customer_review")
+    @Column
     private Boolean CustomerReview;
 
-    @Column(name = "seller_review")
+    @Column
     private Boolean SellerReview;
 
-    @Column(name = "is_sold")
+    @Column
     private Boolean isSold;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "product_type")
+    @Column
     private ProductType productType;
 
     public Product() {
@@ -63,7 +68,7 @@ public class Product implements Serializable {
 
     public Product(Long id, String name, String description, String imagePath,
                    Double price, SalesType salesType, LocalDate releaseDate, Category category,
-                   List<Offer> offers, Boolean customerReview, Boolean sellerReview, Boolean isSold, ProductType productType) {
+                   List<Offer> offers,Boolean customerReview, Boolean sellerReview, Boolean isSold,ProductType productType) {
         this.id = id;
         this.Name = name;
         this.Description = description;
@@ -72,7 +77,7 @@ public class Product implements Serializable {
         this.salesType = salesType;
         this.ReleaseDate = releaseDate;
         this.category = category;
-        this.offers = offers;
+        this.offers=offers;
         this.CustomerReview = customerReview;
         this.SellerReview = sellerReview;
         this.isSold = isSold;
@@ -154,13 +159,6 @@ public class Product implements Serializable {
         this.category = category;
     }
 
-    public List<Offer> getOffers() {
-        return offers;
-    }
-
-    public void setOffers(List<Offer> offers) {
-        this.offers = offers;
-    }
 
     public Boolean getCustomerReview() {
         return CustomerReview;
@@ -194,6 +192,13 @@ public class Product implements Serializable {
         this.productType = productType;
     }
 
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
 
     @Override
     public String toString() {

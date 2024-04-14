@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Account implements Serializable {
 
     @Id
@@ -43,7 +44,7 @@ public class Account implements Serializable {
     private String Description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Role UserRole;
 
     @Column

@@ -11,13 +11,13 @@ public class Review implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rating")
+    @Column
     private int Rating;
 
-    @Column(name = "comment")
+    @Column
     private String Comment;
 
-    @Column(name = "reviw_date")
+    @Column
     private Date ReviewDate;
 
     @ManyToOne
