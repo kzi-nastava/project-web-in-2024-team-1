@@ -4,15 +4,11 @@ import com.webshop.model.*;
 import com.webshop.repository.CategoryRepository;
 import com.webshop.repository.OfferRepository;
 import com.webshop.repository.ProductRepository;
-import com.webshop.repository.UserRepository;
+import com.webshop.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-
-import java.time.LocalDate;
-import java.util.List;
 
 /*
    @SpringBootApplication anotacija nastala je od @EnableAutoConfiguration anotacije koja
@@ -24,7 +20,7 @@ public class WebShopApplication implements CommandLineRunner {
 	   inace bi pozivi bili u npr. nekom od servisa.
 	 */
 	@Autowired
-	private UserRepository userRepository;
+	private AccountRepository accountRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -39,7 +35,7 @@ public class WebShopApplication implements CommandLineRunner {
 		Account newUser = new Account();
 		newUser.setName("hello");
 
-		userRepository.save(newUser);
+		accountRepository.save(newUser);
 
 //		Category newCategory = new Category();
 //		newCategory.setCategoryName("Ime kategorije");
@@ -81,7 +77,7 @@ public class WebShopApplication implements CommandLineRunner {
 ////		List<Employee> employees = this.employeeRepository.findByFirstNameIgnoreCase("jovanka");
 ////		List<Employee> employees = this.employeeRepository.findByDepartmentName("Menadžment");
 //
-//		for (Account user : userRepository.findAll()){
+//		for (Account user : accountRepository.findAll()){
 //			System.out.println(user.toString());
 //		}
 
