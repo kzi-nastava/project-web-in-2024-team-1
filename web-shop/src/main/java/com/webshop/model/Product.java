@@ -63,7 +63,7 @@ public class Product implements Serializable {
 
     public Product() {
 
-        this(1L,"","","default.jpg",1.0,SalesType.FIXED_PRICE,LocalDate.MIN,new Category(),new ArrayList<>(),false,false,false,ProductType.FOR_SALE);
+        this(1L,"","","default.jpg",1.0,SalesType.FIXED_PRICE,LocalDate.MIN,null,new ArrayList<>(),false,false,false,ProductType.FOR_SALE);
     }
 
     public Product(Long id, String name, String description, String imagePath,

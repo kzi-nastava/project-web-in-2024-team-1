@@ -1,6 +1,9 @@
 package com.webshop;
 
-import com.webshop.model.Account;
+import com.webshop.model.*;
+import com.webshop.repository.CategoryRepository;
+import com.webshop.repository.OfferRepository;
+import com.webshop.repository.ProductRepository;
 import com.webshop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -8,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 /*
@@ -21,6 +25,12 @@ public class WebShopApplication implements CommandLineRunner {
 	 */
 	@Autowired
 	private UserRepository userRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private OfferRepository offerRepository;
 
 	@Override
 	public void run(String... args) {
@@ -29,18 +39,53 @@ public class WebShopApplication implements CommandLineRunner {
 		Account newUser = new Account();
 		newUser.setName("hello");
 
-		// čuvamo objekat u bazi
 		userRepository.save(newUser);
 
-		List<Account> users = this.userRepository.findAll();
-//		List<Employee> employees = this.employeeRepository.findAllByPositionOrderByFirstName("radnik");
-//		List<Employee> employees = this.employeeRepository.findByFirstNameOrLastName("Aleksandar", "Milić");
-//		List<Employee> employees = this.employeeRepository.findByFirstNameIgnoreCase("jovanka");
-//		List<Employee> employees = this.employeeRepository.findByDepartmentName("Menadžment");
+//		Category newCategory = new Category();
+//		newCategory.setCategoryName("Ime kategorije");
+//		categoryRepository.save(newCategory);
+//
+//
+//		Offer newOffer = new Offer();
+//		newOffer.setPriceOffer(20.0);
+//		newOffer.setRole(Role.CUSTOMER);
+//		offerRepository.save(newOffer);
+//
+//		Product newProduct = new Product();
+//		newProduct.setName("Naziv proizvoda");
+//		newProduct.setDescription("Opis proizvoda");
+//		newProduct.setImagePath("slika.jpg");
+//		newProduct.setPrice(25.99);
+//		newProduct.setSalesType(SalesType.FIXED_PRICE);
+//		newProduct.setReleaseDate(LocalDate.of(2024, 4, 15));
+//		//newProduct.setCategory(newCategory);
+//		newProduct.setOffers(List.of(newOffer));
+//		newProduct.setCustomerReview(true);
+//		newProduct.setSellerReview(false);
+//		newProduct.setSold(false);
+//		newProduct.setProductType(ProductType.FOR_SALE);
+//
+//
+//		// čuvamo objekat u bazi
+//
+//		productRepository.save(newProduct);
+//
+//
+//		List<Account> users = this.userRepository.findAll();
+//		List<Product> products = this.productRepository.findAll();
+//		List<Category> categories = this.categoryRepository.findAll();
+//		List<Offer> offers = this.offerRepository.findAll();
+//
+////		List<Employee> employees = this.employeeRepository.findAllByPositionOrderByFirstName("radnik");
+////		List<Employee> employees = this.employeeRepository.findByFirstNameOrLastName("Aleksandar", "Milić");
+////		List<Employee> employees = this.employeeRepository.findByFirstNameIgnoreCase("jovanka");
+////		List<Employee> employees = this.employeeRepository.findByDepartmentName("Menadžment");
+//
+//		for (Account user : userRepository.findAll()){
+//			System.out.println(user.toString());
+//		}
 
-		for (Account user : users){
-			System.out.println(users);
-		}
+		System.out.println("END");
 	}
 
 
