@@ -50,14 +50,14 @@ public class Account implements Serializable {
     @Column
     private Boolean blocked;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "ACCOUNT_PRODUCTS",
             joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id")
     )
     private List<Product> productList;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "ACCOUNT_REVIEWS",
             joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id")
@@ -68,29 +68,22 @@ public class Account implements Serializable {
     private double averageRating;
 
     public Account() {
-        this.id = 1L;
         this.name = "";
         this.lastName = "";
         this.username = "";
-        this.email = "";
         this.phoneNumber = "";
         this.password = "";
         this.dateOfBirth = LocalDate.MIN;
         this.imagePath = "default.jpg";
         this.description = "bio";
         this.userRole = Role.CUSTOMER;
-        this.blocked = false;
-        this.productList = new ArrayList<>();
-        this.reviewList = new ArrayList<>();
         this.averageRating = 1.0;
     }
 
     public Account(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, List<Product> productList, List<Review> reviewList, double averageRating) {
-        this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.username = username;
-        this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
@@ -98,8 +91,6 @@ public class Account implements Serializable {
         this.description = description;
         this.userRole = userRole;
         this.blocked = blocked;
-        this.productList = productList;
-        this.reviewList = reviewList;
         this.averageRating = averageRating;
     }
 

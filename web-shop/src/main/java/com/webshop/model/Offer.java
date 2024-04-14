@@ -16,9 +16,9 @@ public class Offer implements Serializable {
     @Column
     private Double PriceOffer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    //@ManyToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "product_id")
+    //private Product product;
 
     @Enumerated(EnumType.STRING)
     @Column
