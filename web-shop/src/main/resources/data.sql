@@ -4,9 +4,9 @@ INSERT INTO ACCOUNT (name,last_name,username,email,phone_number,password,date_of
 INSERT INTO ACCOUNT (name,last_name,username,email,phone_number,password,date_of_birth,image_path,description,user_role,average_rating) VALUES ('Jovan','Jovic','jovan123','Jovan.Jovic@gmail.com','0654536780','jovan111','1999-02-10','datoteka.jpg','bio','ADMINISTRATOR',9.6);
 
 
-INSERT INTO OFFER (price_offer, role)VALUES (20.00, 'CUSTOMER');
+INSERT INTO OFFER (price_offer, account_id)VALUES (20.00,1 );
 
-INSERT INTO OFFER (price_offer, role)VALUES (30.00, 'SELLER');
+INSERT INTO OFFER (price_offer, account_id)VALUES (30.00, 1);
 
 --INSERT INTO CATEGORY (category_name) VALUES ('ime kategorije')
 
