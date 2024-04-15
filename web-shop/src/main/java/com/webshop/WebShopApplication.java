@@ -25,7 +25,7 @@ public class WebShopApplication implements CommandLineRunner {
 	 */
 	@Autowired
 
-	private UserRepository accountRepository;
+	private AccountRepository accountRepository;
 	@Autowired
 	private ReportUserRepository reportUserRepository;
 	@Autowired
@@ -50,7 +50,7 @@ public class WebShopApplication implements CommandLineRunner {
 		Offer newOffer = new Offer();
 		newOffer.setPriceOffer(20.0);
 		newOffer.setRole(Role.CUSTOMER);
-
+		offerRepository.save(newOffer);
 		Product newProduct = new Product();
 		newProduct.setName("Naziv proizvoda");
 		newProduct.setDescription("Opis proizvoda");
