@@ -4,7 +4,7 @@ INSERT INTO ACCOUNT (name,last_name,username,email,phone_number,password,date_of
 INSERT INTO ACCOUNT (name,last_name,username,email,phone_number,password,date_of_birth,image_path,description,user_role,average_rating) VALUES ('Maja','Majic','maja123','Maja.Majic@gmail.com','0624536780','maja111','2002-02-10','datoteka.jpg','bio','CUSTOMER',5.0);
 INSERT INTO ACCOUNT (name,last_name,username,email,phone_number,password,date_of_birth,image_path,description,user_role,average_rating) VALUES ('Jovan','Jovic','jovan123','Jovan.Jovic@gmail.com','0654536780','jovan111','1999-02-10','datoteka.jpg','bio','ADMINISTRATOR',9.6);
 
-INSERT INTO OFFER (price_offer, role)VALUES (20.00, 'CUSTOMER'),(40.00, 'ADMINISTRATOR'),(30.00, 'SELLER');
+INSERT INTO OFFER (price_offer, account_id)VALUES (20.00, 1),(40.00, 2),(30.00, 3);
 
 INSERT INTO CATEGORY(category_name)VALUES ('prva kategorija'),('druga kategorija'),('treca kategorija');
 
