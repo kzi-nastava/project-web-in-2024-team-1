@@ -14,6 +14,6 @@ INSERT INTO OFFER (price_offer, account_id)VALUES (30.00, 1);
 INSERT INTO REVIEW (rating,comment,review_date,user_id) VALUES (5,'komentar','2024-01-24',2);
 INSERT INTO REVIEW (rating,comment,review_date,user_id) VALUES (3,'komentar','2024-01-04',1);
 
---INSERT INTO REPORT (reason,report_date,user_id,reporter_id) VALUES ('nesto','2024-04-12',1,2);
---INSERT INTO REPORT (reason,report_date,user_id,reporter_id) VALUES ('nesto','2024-04-10',2,1);
+INSERT INTO REPORT_USER (reason,report_date,reporting_id,reporter_id) VALUES ('nesto','2024-04-12',1,2);
+INSERT INTO REPORT_USER (reason,report_date,reporting_id,reporter_id) VALUES ('nesto','2024-04-10',2,1);
 

@@ -95,8 +95,6 @@ public class ReportUser implements Serializable {
                 "id=" + id +
                 ", Reason='" + Reason + '\'' +
                 ", ReportDate=" + ReportDate +
-                ", reportingUser=" + reportingUser +
-                ", reportedUser=" + reportedUser +
                 ", status=" + status +
                 '}';
     }
