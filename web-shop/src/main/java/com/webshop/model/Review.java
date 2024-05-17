@@ -3,6 +3,7 @@ package com.webshop.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,19 +21,18 @@ public class Review implements Serializable {
     @Column
     private Date ReviewDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private Account user;
 
     public Review() {
-        this(1,"",new Date(0),new Account());
+        this(1,"", new Date(0));
     }
 
-    public Review(int Rating, String Comment, Date ReviewDate, Account user) {
+    public Review(int Rating, String Comment, Date ReviewDate) {
         this.Rating = Rating;
         this.Comment = Comment;
         this.ReviewDate = ReviewDate;
-        this.user = user;
     }
 
     public Long getId() {
@@ -73,5 +73,15 @@ public class Review implements Serializable {
 
     public void setReviewer(Account reviewer) {
         user = reviewer;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", Rating=" + Rating +
+                ", Comment='" + Comment + '\'' +
+                ", ReviewDate=" + ReviewDate +
+                '}';
     }
 }

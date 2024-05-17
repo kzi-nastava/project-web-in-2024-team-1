@@ -16,86 +16,84 @@ public class Account implements Serializable {
     private Long id;
 
     @Column
-    private String Name;
+    private String name;
 
     @Column
-    private String LastName;
+    private String lastName;
 
     @Column(unique = true)
-    private String Username;
+    private String username;
 
     @Column(unique = true)
-    private String Email;
+    private String email;
 
     @Column
-    private String PhoneNumber;
+    private String phoneNumber;
 
     @Column
-    private String Password;
+    private String password;
 
     @Temporal(TemporalType.DATE)
     @Column
-    private LocalDate DateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column
-    private String ImagePath;
+    private String imagePath;
 
     @Column
-    private String Description;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column
-    private Role UserRole;
+    private Role userRole;
 
     @Column
-    private Boolean Blocked;
+    private Boolean blocked;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "ACCOUNT_PRODUCTS",
             joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id")
     )
-    private List<Product> ProductList;
+    private List<Product> productList;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "ACCOUNT_REVIEWS",
             joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id")
     )
-    private List<Review> ReviewList;
+    private List<Review> reviewList;
 
     @Column
-    private double AverageRating;
+    private double averageRating;
 
     public Account() {
-        this.Name = "";
-        this.LastName = "";
-        this.Username = "";
-        this.Email = "";
-        this.PhoneNumber = "";
-        this.Password = "";
-        this.DateOfBirth = LocalDate.MIN;
-        this.ImagePath = "default.jpg";
-        this.Description = "bio";
-        this.UserRole = Role.CUSTOMER;
-        this.Blocked = false;
-        this.AverageRating = 1.0;
+
+        this.name = "";
+        this.lastName = "";
+        this.username = "";
+        this.phoneNumber = "";
+        this.password = "";
+        this.dateOfBirth = LocalDate.MIN;
+        this.imagePath = "default.jpg";
+        this.description = "bio";
+        this.userRole = Role.CUSTOMER;
+        this.averageRating = 1.0;
     }
 
+    public Account(Long id, String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, List<Product> productList, List<Review> reviewList, double averageRating) {
+        this.name = name;
+        this.lastName = lastName;
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.imagePath = imagePath;
+        this.description = description;
+        this.userRole = userRole;
+        this.blocked = blocked;
+        this.averageRating = averageRating;
 
-    public Account(String name, String lastName, String username, String email, String phoneNumber, String password, LocalDate dateOfBirth, String imagePath, String description, Role userRole, Boolean blocked, Double averageRating ) {
-        this.Name = name;
-        this.LastName = lastName;
-        this.Username = username;
-        this.Email = email;
-        this.PhoneNumber = phoneNumber;
-        this.Password = password;
-        this.DateOfBirth = dateOfBirth;
-        this.ImagePath = imagePath;
-        this.Description = description;
-        this.UserRole = userRole;
-        this.Blocked = blocked;
-        this.AverageRating = averageRating;
     }
 
     public void setId(Long id) {
@@ -106,124 +104,135 @@ public class Account implements Serializable {
         return id;
     }
 
+
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        this.Name = name;
+        this.name = name;
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
-        this.LastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        this.Username = username;
+        this.username = username;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        this.Email = email;
+        this.email = email;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        this.Password = password;
+        this.password = password;
     }
 
     public LocalDate getDateOfBirth() {
-        return DateOfBirth;
+        return dateOfBirth;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.DateOfBirth = dateOfBirth;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getImagePath() {
-        return ImagePath;
+        return imagePath;
     }
 
     public void setImagePath(String imagePath) {
-        this.ImagePath = imagePath;
+        this.imagePath = imagePath;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        this.Description = description;
+        this.description = description;
     }
 
     public Role getUserRole() {
-        return UserRole;
+        return userRole;
     }
 
     public void setUserRole(Role userRole) {
-        this.UserRole = userRole;
+        this.userRole = userRole;
     }
 
     public Boolean getBlocked() {
-        return Blocked;
+        return blocked;
     }
 
     public void setBlocked(Boolean blocked) {
-        this.Blocked = blocked;
+        this.blocked = blocked;
     }
 
-    public List<Product> getProductList() {return ProductList;}
+    public List<Product> getProductList() {
+        return productList;
+    }
 
-    public void setProductList(List<Product> productList) {this.ProductList = productList;}
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+    }
 
-    public List<Review> getReviewList() {return ReviewList;}
+    public List<Review> getReviewList() {
+        return reviewList;
+    }
 
-    public void setReviewList(List<Review> reviewList) {this.ReviewList = reviewList;}
+    public void setReviewList(List<Review> reviewList) {
+        this.reviewList = reviewList;
+    }
 
-    public double getAverageRating() {return AverageRating;}
+    public double getAverageRating() {
+        return averageRating;
+    }
 
-    public void setAverageRating(double averageRating) {this.AverageRating = averageRating;}
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Account{" +
                 "id=" + id +
-                ", Name='" + Name + '\'' +
-                ", LastName='" + LastName + '\'' +
-                ", Username='" + Username + '\'' +
-                ", Email='" + Email + '\'' +
-                ", PhoneNumber='" + PhoneNumber + '\'' +
-                ", Password='" + Password + '\'' +
-                ", DateOfBirth=" + DateOfBirth +
-                ", ImagePath='" + ImagePath + '\'' +
-                ", Description='" + Description + '\'' +
-                ", UserRole=" + UserRole +
-                ", Blocked=" + Blocked +
-                ", ProductList=" + ProductList +
-                ", ReviewList=" + ReviewList +
-                ", AverageRating=" + AverageRating +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", imagePath='" + imagePath + '\'' +
+                ", description='" + description + '\'' +
+                ", userRole=" + userRole +
+                ", blocked=" + blocked +
+                ", averageRating=" + averageRating +
                 '}';
     }
 }

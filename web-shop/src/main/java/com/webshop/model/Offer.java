@@ -13,22 +13,26 @@ public class Offer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "price_offer")
+    @Column
     private Double PriceOffer;
 
+    //@ManyToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "product_id")
+    //private Product product;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
+
 
     public Offer() {
-        this(1L,1.0,Role.CUSTOMER);
+        this(1.0);
     }
 
-    public Offer(Long id, Double priceOffer, Role role) {
-        this.id = id;
+    public Offer(Double priceOffer) {
         this.PriceOffer = priceOffer;
-        this.role = role;
+
     }
 
     public void setId(Long id) {
@@ -47,11 +51,22 @@ public class Offer implements Serializable {
         this.PriceOffer = priceOffer;
     }
 
-    public Role getRole() {
-        return role;
+
+    public Account getAccount() {
+        return account;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    @Override
+    public String toString() {
+        String accountName = (account != null) ? account.getName() : "N/A";
+        return "Offer{" +
+                "id=" + id +
+                ", PriceOffer=" + PriceOffer +
+                ", accountName=" + accountName +
+                '}';
     }
 }

@@ -16,11 +16,10 @@ public class Category implements Serializable {
 
 
     public Category() {
-        this(1L,"");
+        this("");
     }
 
-    public Category(Long id, String categoryName) {
-        this.id = id;
+    public Category(String categoryName) {
         this.CategoryName = categoryName;
     }
 
@@ -40,5 +39,11 @@ public class Category implements Serializable {
         this.CategoryName = categoryName;
     }
 
-
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", CategoryName='" + CategoryName + '\'' +
+                '}';
+    }
 }

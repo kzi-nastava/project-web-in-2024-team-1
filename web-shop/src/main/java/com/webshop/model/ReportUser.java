@@ -17,31 +17,27 @@ public class ReportUser implements Serializable {
     @Column
     private Date ReportDate;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "reporting_id", referencedColumnName = "id")
     private Account reportingUser;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "reporter_id", referencedColumnName = "id")
     private Account reportedUser;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private ReportStatus status;
 
     public ReportUser() {
         this.Reason = "";
         this.ReportDate = new Date(0);
-        this.reportingUser = new Account();
-        this.reportedUser = new Account();
         this.status = ReportStatus.SUBMITTED;
     }
 
-    public ReportUser(String reason, Date reportDate, Account reportingUser, Account reportedUser, ReportStatus status) {
+    public ReportUser(String reason, Date reportDate, ReportStatus status) {
         this.Reason = reason;
         this.ReportDate = reportDate;
-        this.reportingUser = reportingUser;
-        this.reportedUser = reportedUser;
         this.status = status;
     }
 
@@ -91,5 +87,17 @@ public class ReportUser implements Serializable {
 
     public void setStatus(ReportStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "ReportUser{" +
+                "id=" + id +
+                ", Reason='" + Reason + '\'' +
+                ", ReportDate=" + ReportDate +
+                ", reportingUser=" + reportingUser +
+                ", reportedUser=" + reportedUser +
+                ", status=" + status +
+                '}';
     }
 }
