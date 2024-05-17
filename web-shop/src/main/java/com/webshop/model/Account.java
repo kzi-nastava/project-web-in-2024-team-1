@@ -232,8 +232,6 @@ public class Account implements Serializable {
                 ", description='" + description + '\'' +
                 ", userRole=" + userRole +
                 ", blocked=" + blocked +
-                ", productList=" + productList +
-                ", reviewList=" + reviewList +
                 ", averageRating=" + averageRating +
                 '}';
     }

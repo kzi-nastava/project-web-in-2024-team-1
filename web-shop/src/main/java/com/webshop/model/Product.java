@@ -190,7 +190,7 @@ public class Product implements Serializable {
                 ", Price=" + Price +
                 ", salesType=" + salesType +
                 ", ReleaseDate=" + ReleaseDate +
-                ", category=" + category +
+              //  ", category=" + category +
                 ", offers=" + offers +
                 ", CustomerReview=" + CustomerReview +
                 ", SellerReview=" + SellerReview +
