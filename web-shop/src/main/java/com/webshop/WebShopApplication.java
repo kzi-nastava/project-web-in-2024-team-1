@@ -40,7 +40,7 @@ public class WebShopApplication implements CommandLineRunner {
 
 		accountRepository.save(newUser);
 
-		Category newCategory = new Category();
+	/*	Category newCategory = new Category();
 		newCategory.setCategoryName("Ime kategorije");
 		categoryRepository.save(newCategory);
 
@@ -58,7 +58,7 @@ public class WebShopApplication implements CommandLineRunner {
 		newProduct.setReleaseDate(LocalDate.of(2024, 4, 15));
 		productRepository.save(newProduct);
 
-		newProduct.setCategory(newCategory); // Postavljanje kategorije na proizvod
+	//	newProduct.setCategory(newCategory); // Postavljanje kategorije na proizvod
 		newProduct.setOffers(List.of(newOffer));
 		newProduct.setCustomerReview(true);
 		newProduct.setSellerReview(false);
@@ -66,7 +66,7 @@ public class WebShopApplication implements CommandLineRunner {
 		newProduct.setProductType(ProductType.FOR_SALE);
 
 		productRepository.save(newProduct);
-
+*/
 		System.out.println("END");
 
 		for (Offer offer : offerRepository.findAll()) {
