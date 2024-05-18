@@ -1,5 +1,3 @@
-
-
 INSERT INTO ACCOUNT (name,last_name,username,email,phone_number,password,date_of_birth,image_path,description,user_role,average_rating)
 VALUES
     ('Ana','Andric','ana123','Ana.Andric@gmail.com','0664536780','ana111','2001-02-10','datoteka.jpg','bio','SELLER',10.0),
