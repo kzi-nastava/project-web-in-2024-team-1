@@ -11,8 +11,8 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Product implements Serializable {
-
+public class Product implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,8 +44,7 @@ public class Product implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "PRODUCT_OFFERS",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "offer_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "offer_id"))
     private List<Offer> offers;
 
     @Column
@@ -66,7 +65,8 @@ public class Product implements Serializable {
     }
 
     public Product(String name, String description, Double price,
-                   SalesType salesType, LocalDate releaseDate, String imagePath) {
+                   SalesType salesType, LocalDate releaseDate, String imagePath)
+    {
         this.Name = name;
         this.Description = description;
         this.Price = price;
@@ -181,7 +181,8 @@ public class Product implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Product{" +
                 "id=" + id +
                 ", Name='" + Name + '\'' +

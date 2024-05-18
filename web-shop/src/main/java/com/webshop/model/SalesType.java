@@ -1,6 +1,7 @@
 package com.webshop.model;
 
-public enum SalesType {
+public enum SalesType
+{
     FIXED_PRICE,
     AUCTION
 }

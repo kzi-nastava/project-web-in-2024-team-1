@@ -1,19 +1,16 @@
 package com.webshop.model;
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
-import java.util.List;
 @Entity
-public class Category implements Serializable {
-
+public class Category implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
     private String CategoryName;
-
 
     public Category() {
         this("");
@@ -40,7 +37,8 @@ public class Category implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Category{" +
                 "id=" + id +
                 ", CategoryName='" + CategoryName + '\'' +
