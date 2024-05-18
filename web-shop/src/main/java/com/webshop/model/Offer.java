@@ -14,7 +14,7 @@ public class Offer implements Serializable
     private Long id;
 
     @Column
-    private Double PriceOffer;
+    private Double priceOffer;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
@@ -28,7 +28,7 @@ public class Offer implements Serializable
 
     public Offer(Double priceOffer)
     {
-        this.PriceOffer = priceOffer;
+        this.priceOffer = priceOffer;
     }
 
     public void setId(Long id) {
@@ -40,11 +40,11 @@ public class Offer implements Serializable
     }
 
     public Double getPriceOffer() {
-        return PriceOffer;
+        return priceOffer;
     }
 
     public void setPriceOffer(Double priceOffer) {
-        this.PriceOffer = priceOffer;
+        this.priceOffer = priceOffer;
     }
 
 
@@ -62,7 +62,7 @@ public class Offer implements Serializable
         String accountName = (account != null) ? account.getName() : "N/A";
         return "Offer{" +
                 "id=" + id +
-                ", PriceOffer=" + PriceOffer +
+                ", PriceOffer=" + priceOffer +
                 ", accountName=" + accountName +
                 '}';
     }

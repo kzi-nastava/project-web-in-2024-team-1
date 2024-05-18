@@ -10,14 +10,14 @@ public class Category implements Serializable
     private Long id;
 
     @Column
-    private String CategoryName;
+    private String categoryName;
 
     public Category() {
         this("");
     }
 
     public Category(String categoryName) {
-        this.CategoryName = categoryName;
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -29,11 +29,11 @@ public class Category implements Serializable
     }
 
     public String getCategoryName() {
-        return CategoryName;
+        return categoryName;
     }
 
     public void setCategoryName(String categoryName) {
-        this.CategoryName = categoryName;
+        this.categoryName = categoryName;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class Category implements Serializable
     {
         return "Category{" +
                 "id=" + id +
-                ", CategoryName='" + CategoryName + '\'' +
+                ", CategoryName='" + categoryName + '\'' +
                 '}';
     }
 }
