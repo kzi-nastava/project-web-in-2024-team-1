@@ -7,32 +7,28 @@ import java.io.Serializable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Offer implements Serializable {
-
+public class Offer implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private Double PriceOffer;
-
-    //@ManyToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "product_id")
-    //private Product product;
-
+    private Double priceOffer;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
 
-    public Offer() {
+    public Offer()
+    {
         this(1.0);
     }
 
-    public Offer(Double priceOffer) {
-        this.PriceOffer = priceOffer;
-
+    public Offer(Double priceOffer)
+    {
+        this.priceOffer = priceOffer;
     }
 
     public void setId(Long id) {
@@ -44,11 +40,11 @@ public class Offer implements Serializable {
     }
 
     public Double getPriceOffer() {
-        return PriceOffer;
+        return priceOffer;
     }
 
     public void setPriceOffer(Double priceOffer) {
-        this.PriceOffer = priceOffer;
+        this.priceOffer = priceOffer;
     }
 
 
@@ -61,11 +57,12 @@ public class Offer implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         String accountName = (account != null) ? account.getName() : "N/A";
         return "Offer{" +
                 "id=" + id +
-                ", PriceOffer=" + PriceOffer +
+                ", PriceOffer=" + priceOffer +
                 ", accountName=" + accountName +
                 '}';
     }
