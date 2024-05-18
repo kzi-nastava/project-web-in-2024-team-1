@@ -1,7 +1,11 @@
 package com.webshop.service;
 
 import com.webshop.dto.RegisterDto;
+import com.webshop.exception.UsernameAlreadyExistsException;
+import com.webshop.exception.GmailAlreadyExistsException;
+import com.webshop.exception.AccountRoleException;
 import com.webshop.model.Account;
+import com.webshop.model.Role;
 import com.webshop.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,24 +36,30 @@ public class AccountService {
 
     public Account findByEmail(String email){
         Optional<Account> account = accountRepository.findByEmail(email);
-        if(account.isPresent()){
-            return account.get();
-        }
-        return null;
+
+        return account.orElse(null);
     }
 
     public Account findByUsername(String username){
         Optional<Account> account = accountRepository.findByUsername(username);
-        if(account.isPresent()){
-            return account.get();
-        }
-        return null;
+
+        return account.orElse(null);
     }
 
-    public void register(RegisterDto registerDto){
-       /* if(accountRepository.findByUsername(registerDto.getUsername()).isPresent()){
-            throws new Exception("Username already exists");
-        }*/
+    public void register(RegisterDto registerDto) {
+        if (accountRepository.findByUsername(registerDto.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("Username already exists");
+        }
+
+        if (accountRepository.findByEmail(registerDto.getEmail()).isPresent()) {
+            throw new GmailAlreadyExistsException("Email already exists");
+        }
+
+        Role role = registerDto.getRole();
+        if(role != Role.CUSTOMER && role != Role.SELLER){
+            throw new AccountRoleException("Role not allowed");
+        }
+
         Account account = new Account();
         account.setName(registerDto.getName());
         account.setLastName(registerDto .getLastName());
