@@ -1,9 +1,12 @@
 package com.webshop.service;
 
+import com.webshop.dto.LoginDto;
 import com.webshop.dto.RegisterDto;
 import com.webshop.exception.UsernameAlreadyExistsException;
 import com.webshop.exception.GmailAlreadyExistsException;
 import com.webshop.exception.AccountRoleException;
+import com.webshop.exception.PasswordNotCorrectException;
+import com.webshop.exception.AuthenticationException;
 import com.webshop.model.Account;
 import com.webshop.model.Role;
 import com.webshop.repository.AccountRepository;
@@ -55,6 +58,10 @@ public class AccountService {
             throw new GmailAlreadyExistsException("Email already exists");
         }
 
+        if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
+            throw new PasswordNotCorrectException("Passwords do not match");
+        }
+
         Role role = registerDto.getRole();
         if(role != Role.CUSTOMER && role != Role.SELLER){
             throw new AccountRoleException("Role not allowed");
@@ -69,7 +76,17 @@ public class AccountService {
         account.setPassword(registerDto.getPassword());
         account.setUserRole(registerDto.getRole());
         save(account);
+    }
 
+    public Account login(LoginDto loginDto) {
+        Optional<Account> account = accountRepository.findByUsername(loginDto.getUsername());
+        if(account.isEmpty()){
+           throw new AuthenticationException("Account username not valid");
+        }
+        if(!account.get().getPassword().equals(loginDto.getPassword())){
+            throw new AuthenticationException("Wrong password");
+        }
+        return account.get();
     }
 
 }
