@@ -11,23 +11,23 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Product implements Serializable {
-
+public class Product implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String Name;
+    private String name;
 
     @Column
-    private String Description;
+    private String description;
 
     @Column
-    private String ImagePath;
+    private String imagePath;
 
     @Column
-    private Double Price;
+    private Double price;
 
     @Enumerated(EnumType.STRING)
     @Column
@@ -35,7 +35,7 @@ public class Product implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column
-    private LocalDate ReleaseDate;
+    private LocalDate releaseDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -44,15 +44,14 @@ public class Product implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "PRODUCT_OFFERS",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "offer_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "offer_id"))
     private List<Offer> offers;
 
     @Column
-    private Boolean CustomerReview;
+    private Boolean customerReview;
 
     @Column
-    private Boolean SellerReview;
+    private Boolean sellerReview;
 
     @Column
     private Boolean isSold;
@@ -66,13 +65,14 @@ public class Product implements Serializable {
     }
 
     public Product(String name, String description, Double price,
-                   SalesType salesType, LocalDate releaseDate, String imagePath) {
-        this.Name = name;
-        this.Description = description;
-        this.Price = price;
+                   SalesType salesType, LocalDate releaseDate, String imagePath)
+    {
+        this.name = name;
+        this.description = description;
+        this.price = price;
         this.salesType = salesType;
-        this.ReleaseDate = releaseDate;
-        this.ImagePath = imagePath;
+        this.releaseDate = releaseDate;
+        this.imagePath = imagePath;
     }
 
     public void setId(Long id) {
@@ -84,35 +84,35 @@ public class Product implements Serializable {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        this.Name = name;
+        this.name = name;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        this.Description = description;
+        this.description = description;
     }
 
     public String getImagePath() {
-        return ImagePath;
+        return imagePath;
     }
 
     public void setImagePath(String imagePath) {
-        this.ImagePath = imagePath;
+        this.imagePath = imagePath;
     }
 
     public Double getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(Double price) {
-        this.Price = price;
+        this.price = price;
     }
 
     public SalesType getSalesType() {
@@ -124,11 +124,11 @@ public class Product implements Serializable {
     }
 
     public LocalDate getReleaseDate() {
-        return ReleaseDate;
+        return releaseDate;
     }
 
     public void setReleaseDate(LocalDate releaseDate) {
-        this.ReleaseDate = releaseDate;
+        this.releaseDate = releaseDate;
     }
 
     public Category getCategory() {
@@ -141,19 +141,19 @@ public class Product implements Serializable {
 
 
     public Boolean getCustomerReview() {
-        return CustomerReview;
+        return customerReview;
     }
 
     public void setCustomerReview(Boolean customerReview) {
-        this.CustomerReview = customerReview;
+        this.customerReview = customerReview;
     }
 
     public Boolean getSellerReview() {
-        return SellerReview;
+        return sellerReview;
     }
 
     public void setSellerReview(Boolean sellerReview) {
-        this.SellerReview = sellerReview;
+        this.sellerReview = sellerReview;
     }
 
     public Boolean getSold() {
@@ -181,19 +181,20 @@ public class Product implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Product{" +
                 "id=" + id +
-                ", Name='" + Name + '\'' +
-                ", Description='" + Description + '\'' +
-                ", ImagePath='" + ImagePath + '\'' +
-                ", Price=" + Price +
+                ", Name='" + name + '\'' +
+                ", Description='" + description + '\'' +
+                ", ImagePath='" + imagePath + '\'' +
+                ", Price=" + price +
                 ", salesType=" + salesType +
-                ", ReleaseDate=" + ReleaseDate +
+                ", ReleaseDate=" + releaseDate +
               //  ", category=" + category +
                 ", offers=" + offers +
-                ", CustomerReview=" + CustomerReview +
-                ", SellerReview=" + SellerReview +
+                ", CustomerReview=" + customerReview +
+                ", SellerReview=" + sellerReview +
                 ", isSold=" + isSold +
                 ", ProductType=" + productType +
                 '}';

@@ -1,6 +1,7 @@
 package com.webshop.model;
 
-public enum ProductType {
+public enum ProductType
+{
     FOR_SALE,
     PURCHASED
 }
