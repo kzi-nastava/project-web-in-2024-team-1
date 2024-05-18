@@ -21,7 +21,7 @@ public class Review implements Serializable {
     @Column
     private Date ReviewDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Account user;
 
