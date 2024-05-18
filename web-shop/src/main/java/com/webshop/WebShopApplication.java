@@ -43,42 +43,6 @@ public class WebShopApplication implements CommandLineRunner {
 
 		// kreiramo novi objekat klase Employee
 
-		Category newCategory = new Category();
-		newCategory.setCategoryName("Ime kategorije");
-		categoryRepository.save(newCategory);
-//
-//		Offer newOffer = new Offer();
-//		newOffer.setPriceOffer(20.0);
-
-		Product newProduct = new Product();
-		newProduct.setName("Naziv proizvoda");
-		newProduct.setDescription("Opis proizvoda");
-		newProduct.setImagePath("slika.jpg");
-		newProduct.setPrice(25.99);
-		newProduct.setSalesType(SalesType.FIXED_PRICE);
-		newProduct.setReleaseDate(LocalDate.of(2024, 4, 15));
-		productRepository.save(newProduct);
-
-		newProduct.setCategory(newCategory); // Postavljanje kategorije na proizvod
-		//newProduct.setOffers(List.of(newOffer));
-		newProduct.setCustomerReview(true);
-		newProduct.setSellerReview(false);
-		newProduct.setSold(false);
-		newProduct.setProductType(ProductType.FOR_SALE);
-		productRepository.save(newProduct);
-
-
-
-
-//
-//		newOffer.setAccount(newUser);
-//		offerRepository.save(newOffer);
-
-
-
-
-
-
 		System.out.println("END");
 
 
@@ -96,10 +60,6 @@ public class WebShopApplication implements CommandLineRunner {
 
 			System.out.println(product.toString());
 		}
-
-
-
-
 	}
 
 
