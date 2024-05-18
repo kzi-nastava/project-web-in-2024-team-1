@@ -47,19 +47,7 @@ public class WebShopApplication implements CommandLineRunner {
 
 
 
-		for (Offer offer : offerRepository.findAll()) {
-			System.out.println(offer.toString());
-		}
 
-		for (Category category : categoryRepository.findAll()) {
-
-			System.out.println(category.toString());
-		}
-
-		for (Product product : productRepository.findAll()) {
-
-			System.out.println(product.toString());
-		}
 	}
 
 
