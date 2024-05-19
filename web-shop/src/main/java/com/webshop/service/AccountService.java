@@ -1,21 +1,22 @@
 package com.webshop.service;
 
-import com.webshop.dto.LoginDto;
-import com.webshop.dto.RegisterDto;
-import com.webshop.dto.UpdateProfileAdvanceDto;
-import com.webshop.dto.UpdateProfileBasicDto;
+import com.webshop.dto.*;
 import com.webshop.exception.UsernameAlreadyExistsException;
 import com.webshop.exception.GmailAlreadyExistsException;
 import com.webshop.exception.AccountRoleException;
 import com.webshop.exception.PasswordNotCorrectException;
 import com.webshop.exception.AuthenticationException;
 import com.webshop.exception.AccountNotFoundException;
+import com.webshop.exception.ReviewAndReviewedException;
 import com.webshop.model.Account;
+import com.webshop.model.Review;
 import com.webshop.model.Role;
 import com.webshop.repository.AccountRepository;
+import com.webshop.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,8 @@ import java.util.Optional;
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public Account findOne(Long id){
         Optional<Account> account = accountRepository.findById(id);
@@ -131,5 +134,7 @@ public class AccountService {
 
         save(account);
     }
+
+
 
 }

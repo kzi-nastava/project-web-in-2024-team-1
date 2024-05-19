@@ -3,6 +3,7 @@ package com.webshop.controller;
 import com.webshop.dto.*;
 import com.webshop.exception.*;
 import com.webshop.model.Account;
+import com.webshop.model.Review;
 import com.webshop.service.AccountService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,4 +104,5 @@ public class AccountController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 }
