@@ -1,8 +1,6 @@
 package com.webshop.controller;
 
-import com.webshop.dto.AccountDto;
 import com.webshop.dto.ProductDto;
-import com.webshop.model.Account;
 import com.webshop.model.Product;
 import com.webshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +22,7 @@ public class ProductController
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping("products")
     public ResponseEntity<List<ProductDto>> getAllProducts(HttpSession session)
     {
         List<Product> productList = productService.findAll();
@@ -46,12 +44,28 @@ public class ProductController
     }
 
     @GetMapping("product/{id}")
-     public ResponseEntity<Product>getProductById(@PathVariable("id") Long id)
-     {
-         Product product = productService.findOne(id);
-         if(product == null) {return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
+    public ResponseEntity<Product>getProductById(@PathVariable("id") Long id)
 
-         ProductDto productDto = new ProductDto(product);
-         return ResponseEntity.ok(product);
-     }
+    {
+        Product product = productService.findOne(id);
+        if(product == null) {return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
+
+        ProductDto productDto = new ProductDto(product);
+        return ResponseEntity.ok(product);
+    }
+
+//     @GetMapping("search")
+//    public ResponseEntity<List<Product>> searcProducts(String name, String description)
+//     {
+//         if (name != null && description != null) {
+//             return productService.findByName(name);
+//         } else if (name != null) {
+//             return productRepository.findByNameContaining(name);
+//         } else if (description != null) {
+//             return productRepository.findByDescriptionContaining(description);
+//         } else {
+//             return productService.findAll();
+//         }
+//     }
+
 }
