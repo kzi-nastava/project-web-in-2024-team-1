@@ -62,7 +62,7 @@ public class ProductFilterDto
         this.categoryName = categoryName;
     }
 
-    public SalesType getSalesType() {
+    public String getSalesType() {
         return salesType;
     }
 
