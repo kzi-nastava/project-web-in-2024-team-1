@@ -1,6 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.dto.ProductDto;
+import com.webshop.dto.ProductFilterDto;
 import com.webshop.exception.AccountNotFoundException;
 import com.webshop.model.Product;
 import com.webshop.service.ProductService;
@@ -8,10 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,5 +89,11 @@ public class ProductController
             }
             return ResponseEntity.ok(productDtoList);
         } catch (Exception e){return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);}
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<List<ProductDto>> filterProducts(@RequestBody ProductFilterDto filterDto) {
+        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesType(filterDto);
+        return ResponseEntity.ok(productDtoList);
     }
 }
