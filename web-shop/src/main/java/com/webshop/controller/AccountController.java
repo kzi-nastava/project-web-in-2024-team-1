@@ -1,8 +1,6 @@
 package com.webshop.controller;
 
-import com.webshop.dto.AccountDto;
-import com.webshop.dto.LoginDto;
-import com.webshop.dto.RegisterDto;
+import com.webshop.dto.*;
 import com.webshop.exception.*;
 import com.webshop.model.Account;
 import com.webshop.service.AccountService;
@@ -82,4 +80,27 @@ public class AccountController {
         }
     }
 
+    @PutMapping("update-account")
+    public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileBasicDto updateProfileBasicDto, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if(account == null) {
+            return new ResponseEntity<>("Account not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        accountService.updateAccount(account.getId(),updateProfileBasicDto);
+        return ResponseEntity.ok("Account successfully updated!");
+    }
+
+    @PutMapping("update-advance-account")
+    public ResponseEntity<String> updateAdvanceProfile(@RequestBody UpdateProfileAdvanceDto updateProfileAdvanceDto, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if(account == null) {
+            return new ResponseEntity<>("Account not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try{
+            accountService.updateAdvanceAccount(account.getId(),updateProfileAdvanceDto);
+            return ResponseEntity.ok("Account advanced successfully updated!");
+        } catch (PasswordNotCorrectException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
