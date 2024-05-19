@@ -32,14 +32,11 @@ VALUES
 INSERT INTO ACCOUNT_PRODUCT (account_id,product_id) VALUES (1,1);
 
 
-INSERT INTO REVIEW (rating,comment,review_date,user_id)
+INSERT INTO REVIEW (rating,comment,review_date,reviewer_Id,reviewed_User_Id)
 VALUES
-    (5,'komentar','2024-01-24',2),
-    (3,'komentar','2024-01-04',1);
+    (5,'komentar','2024-01-24',1,2);
 
-INSERT INTO ACCOUNT_REVIEW (account_id,review_id)
-VALUES
-    (1,1),(2,2);
+
 
 INSERT INTO REPORT_USER (reason,report_date,reporting_id,reporter_id)
 VALUES

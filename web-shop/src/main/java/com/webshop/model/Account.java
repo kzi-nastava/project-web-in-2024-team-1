@@ -57,12 +57,18 @@ public class Account implements Serializable {
     )
     private List<Product> productList;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    /*@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "ACCOUNT_REVIEW",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id")
     )
-    private List<Review> reviewList;
+    private List<Review> reviewList;*/
+
+    @OneToMany(mappedBy = "reviewedUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> receivedReviews;
+
+    @OneToMany(mappedBy = "reviewer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> givenReviews;
 
     @Column
     private double averageRating;
@@ -201,13 +207,29 @@ public class Account implements Serializable {
         this.productList = productList;
     }
 
-    public List<Review> getReviewList() {
+    public List<Review> getReceivedReviews() {
+        return receivedReviews;
+    }
+
+    public void setReceivedReviews(List<Review> receivedReviews) {
+        this.receivedReviews = receivedReviews;
+    }
+
+    public List<Review> getGivenReviews() {
+        return givenReviews;
+    }
+
+    public void setGivenReviews(List<Review> givenReviews) {
+        this.givenReviews = givenReviews;
+    }
+
+    /*public List<Review> getReviewList() {
         return reviewList;
     }
 
     public void setReviewList(List<Review> reviewList) {
         this.reviewList = reviewList;
-    }
+    }*/
 
     public double getAverageRating() {
         return averageRating;

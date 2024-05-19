@@ -21,9 +21,17 @@ public class Review implements Serializable {
     @Column
     private Date ReviewDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    /*@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private Account user;
+    private Account user;*/
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "reviewer_Id")
+    private Account reviewer;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "reviewed_User_Id")
+    private Account reviewedUser;
 
     public Review() {
         this(1,"", new Date(0));
@@ -67,12 +75,28 @@ public class Review implements Serializable {
         ReviewDate = reviewDate;
     }
 
-    public Account getReviewer() {
+    /*public Account getReviewer() {
         return user;
     }
 
     public void setReviewer(Account reviewer) {
         user = reviewer;
+    }*/
+
+    public Account getReviewer() {
+        return reviewer;
+    }
+
+    public void setReviewer(Account reviewer) {
+        this.reviewer = reviewer;
+    }
+
+    public Account getReviewedUser() {
+        return reviewedUser;
+    }
+
+    public void setReviewedUser(Account reviewedUser) {
+        this.reviewedUser = reviewedUser;
     }
 
     @Override
