@@ -1,6 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.dto.ProductDto;
+import com.webshop.exception.AccountNotFoundException;
 import com.webshop.model.Product;
 import com.webshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -45,7 +46,6 @@ public class ProductController
 
     @GetMapping("product/{id}")
     public ResponseEntity<Product>getProductById(@PathVariable("id") Long id)
-
     {
         Product product = productService.findOne(id);
         if(product == null) {return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
@@ -54,18 +54,42 @@ public class ProductController
         return ResponseEntity.ok(product);
     }
 
-//     @GetMapping("search")
-//    public ResponseEntity<List<Product>> searcProducts(String name, String description)
-//     {
-//         if (name != null && description != null) {
-//             return productService.findByName(name);
-//         } else if (name != null) {
-//             return productRepository.findByNameContaining(name);
-//         } else if (description != null) {
-//             return productRepository.findByDescriptionContaining(description);
-//         } else {
-//             return productService.findAll();
-//         }
-//     }
+    @GetMapping("/search-by-name")
+    public ResponseEntity<List<ProductDto>> getProductByName(HttpSession session)
+    {
+        Product product= (Product) session.getAttribute("product");
+        if(product == null) {return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
 
+        String productName = product.getName();
+        List<ProductDto> productDtoList = new ArrayList<>();
+        try
+        {
+            List<Product> productList = productService.findByName(productName);
+            for(Product product1 : productList)
+            {
+                 ProductDto productDto = new ProductDto(product1);
+                 productDtoList.add(productDto);
+            }
+            return ResponseEntity.ok(productDtoList);
+        } catch (Exception e){return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);}
+    }
+
+    @GetMapping("/searh-by-description")
+    public ResponseEntity<List<ProductDto>> getProductByDescription(HttpSession session)
+    {
+        Product product=(Product) session.getAttribute("product");
+        if(product == null) {return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
+        String description = product.getDescription();
+        List<ProductDto>productDtoList = new ArrayList<>();
+        try
+        {
+            List<Product> productList = productService.findByName(description);
+            for(Product product1 : productList)
+            {
+                ProductDto productDto = new ProductDto(product1);
+                productDtoList.add(productDto);
+            }
+            return ResponseEntity.ok(productDtoList);
+        } catch (Exception e){return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);}
+    }
 }
