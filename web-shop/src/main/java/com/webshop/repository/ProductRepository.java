@@ -1,5 +1,6 @@
 package com.webshop.repository;
 
+import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
 import org.springframework.data.jpa.repository.JpaRepository;

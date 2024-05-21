@@ -181,10 +181,6 @@ public class Product implements Serializable
         this.offers = offers;
     }
 
-    public boolean hasOffers() {
-        return offers != null && !offers.isEmpty();
-    }
-
     @Override
     public String toString()
     {

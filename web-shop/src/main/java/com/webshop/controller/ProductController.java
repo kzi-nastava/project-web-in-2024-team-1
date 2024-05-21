@@ -3,6 +3,7 @@ package com.webshop.controller;
 import com.webshop.dto.ProductDto;
 import com.webshop.dto.ProductFilterDto;
 import com.webshop.exception.AccountNotFoundException;
+import com.webshop.model.Account;
 import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.service.ProductService;
@@ -94,25 +95,17 @@ public class ProductController
 
 //    @PostMapping("/filter")
 //    public ResponseEntity<List<ProductDto>> filterProducts(@RequestBody ProductFilterDto filterDto) {
-//        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesType(filterDto);
+//        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesTyp
+//        e(filterDto);
 //        return ResponseEntity.ok(productDtoList);
 //    }
 
-    @PutMapping("product/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
-        try {
-            Category category = productService.findCategoryByName(productDto.getCategoryName());
-
-            Product updatedProduct = new Product(
-                    productDto.getName(),
-                    productDto.getDescription(),
-                    productDto.getPrice(),
-                    productDto.getSalesType(),
-                    productDto.getReleaseDate(),
-                    productDto.getImagePath()
-            );
-            updatedProduct.setCategory(category);
-            productService.updateProduct(id, updatedProduct);
+    @PutMapping("update-product/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto,HttpSession session ) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);}
+        try{
+            productService.updateProduct(id, productDto,account);
             return new ResponseEntity<>("Product updated successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
