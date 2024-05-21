@@ -23,16 +23,16 @@ public class ProductService {
 
    public List<ProductDto> findProductByCategoryAndPriceAndSalesType(ProductFilterDto filterDto)
    {
-       List<Product> products = productRepository.findProductByCategoryAndPriceAndSalesType(
+       /*List<Product> products = productRepository.findProductByCategoryAndPriceAndSalesType(
                filterDto.getStartPrice(),
                filterDto.getEndPrice(),
                filterDto.getCategoryName(),
                filterDto.getSalesType()
-       );
+       );*/
        List<ProductDto> productDtos = new ArrayList<>();
-       for (Product product : products) {
+       /*for (Product product : products) {
            productDtos.add(new ProductDto(product));
-       }
+       }*/
        return productDtos;
    }
 }
