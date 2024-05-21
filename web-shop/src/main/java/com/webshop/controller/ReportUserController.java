@@ -45,13 +45,13 @@ public class ReportUserController {
     }
 
     @PostMapping("reject/{reportId}")
-    public ResponseEntity<String> rejectReport(@PathVariable Long reportId,@RequestParam String rejectReason,HttpSession session) {
+    public ResponseEntity<String> rejectReport(@PathVariable Long reportId,@RequestBody ReportUserDto reportUserDto,HttpSession session) {
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
             return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
         }
         try{
-            reportUserService.rejectReport(reportId,rejectReason,account);
+            reportUserService.rejectReport(reportId,reportUserDto.getReason(),account);
             return ResponseEntity.ok("Report rejected");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

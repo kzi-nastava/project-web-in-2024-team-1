@@ -25,11 +25,11 @@ public class Review implements Serializable {
     @JoinColumn(name = "user_id")
     private Account user;*/
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "reviewer_Id")
     private Account reviewer;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "reviewed_User_Id")
     private Account reviewedUser;
 
