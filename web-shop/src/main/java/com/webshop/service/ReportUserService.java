@@ -1,5 +1,7 @@
 package com.webshop.service;
 
+import com.webshop.dto.RejectReportDto;
+import com.webshop.dto.ReportActionDto;
 import com.webshop.dto.ReportUserDto;
 import com.webshop.exception.AccountRoleException;
 import com.webshop.model.Account;
@@ -61,6 +63,7 @@ public class ReportUserService {
             ReportUserDto reportUserDto = new ReportUserDto(reportUser.getId(), reportUser.getReason(),
                     reportUser.getReportDate(), reportUser.getReportingUser().getId(),
                     reportUser.getReportedUser().getId(), status);
+
             reportUserDtos.add(reportUserDto);
         }
         return reportUserDtos;
@@ -81,17 +84,36 @@ public class ReportUserService {
 
     }
 
-    public void rejectReport(Long reportId,String rejectReason,Account currentAccount) {
+    public void rejectReport(Long reportId,RejectReportDto rejectReportDto,Account currentAccount) {
         if(!isAdmin(currentAccount)){
             throw new AccountRoleException("You do not have permission to reject this request");
         }
         ReportUser reportUser = reportUserRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Report not found"));
         reportUser.setStatus(ReportStatus.REJECTED);
-        reportUser.setReason(rejectReason);
+        reportUser.setReason(rejectReportDto.getRejectReason());
         reportUserRepository.save(reportUser);
     }
 
     public boolean isAdmin(Account account) {
         return account != null && account.getUserRole() == Role.ADMINISTRATOR;
+    }
+
+    public List<ReportActionDto> getUserReportActions(Long userId){
+        List<ReportUser> userReports = reportUserRepository.findByReportingUser_Id(userId);
+        List<ReportActionDto> reportActionDtos = new ArrayList<>();
+
+        for (ReportUser reportUser : userReports) {
+            ReportActionDto actionDto  = new ReportActionDto();
+            actionDto.setReportId(reportUser.getId());
+
+            if(reportUser.getStatus() == ReportStatus.ACCEPTED){
+                actionDto.setMessage("Your report has been accepted");
+            } else if (reportUser.getStatus() == ReportStatus.REJECTED){
+                String message = "Your report has been rejected: " + reportUser.getReason();
+                actionDto.setMessage(message);
+            }
+            reportActionDtos.add(actionDto);
+        }
+        return reportActionDtos;
     }
 }
