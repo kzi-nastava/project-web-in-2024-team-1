@@ -4,7 +4,7 @@ VALUES
     ('Maja','Majic','maja123','Maja.Majic@gmail.com','0624536780','maja111','2002-02-10','datoteka.jpg','bio','CUSTOMER',5.0),
     ('Jovan','Jovic','jovan123','Jovan.Jovic@gmail.com','0654536780','jovan111','1999-02-10','datoteka.jpg','bio','ADMINISTRATOR',9.6);
 
-INSERT INTO OFFER (price_offer, account_id)
+INSERT INTO OFFER (price_offer, customer_offer_id)
 VALUES
     (20.00, 1),
     (40.00, 2),
