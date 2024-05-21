@@ -3,6 +3,7 @@ package com.webshop.controller;
 import com.webshop.dto.CreateReviewDto;
 import com.webshop.dto.ReviewDto;
 import com.webshop.exception.AccountNotFoundException;
+import com.webshop.exception.AccountRoleException;
 import com.webshop.exception.ReviewAndReviewedException;
 import com.webshop.model.Account;
 import com.webshop.model.Review;
@@ -80,25 +81,6 @@ public class ReviewController {
         }
     }
 
-   /* @GetMapping("/mutual-reviews/{reviewedUserId}")
-    public ResponseEntity<List<ReviewDto>> getMutualReviews(@PathVariable("reviewedUserId") Long reviewedUserId, HttpSession session) {
-        Account account = (Account) session.getAttribute("account");
-        if (account == null) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        }
-        Long accountId = account.getId();
-
-        boolean isMutual = reviewService.chekIfMutual(accountId, reviewedUserId);
-        if(!isMutual){
-            return ResponseEntity.ok(new ArrayList<>());
-        }
-        List<Review> mutualReviews = reviewService.getMutualReviews(accountId);
-        List<ReviewDto> reviewDtoList = new ArrayList<>();
-        for (Review review : mutualReviews) {
-            reviewDtoList.add(new ReviewDto(review));
-        }
-        return ResponseEntity.ok(reviewDtoList);
-    }*/
 
     @GetMapping("/mutual-reviews/{reviewedUserId}")
     public ResponseEntity<List<ReviewDto>> getMutualReviews(@PathVariable("reviewedUserId") Long reviewedUserId, HttpSession session) {
@@ -113,5 +95,55 @@ public class ReviewController {
             reviewDtoList.add(new ReviewDto(review));
         }
         return ResponseEntity.ok(reviewDtoList);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ReviewDto>> getAllReviews(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            List<Review> reviews = reviewService.getAllReviews(account);
+            List<ReviewDto> reviewDtos = new ArrayList<>();
+            for (Review review : reviews) {
+                reviewDtos.add(new ReviewDto(review));
+            }
+            return ResponseEntity.ok(reviewDtos);
+        } catch (AccountRoleException e) {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PutMapping("/update/{reviewId}")
+    public ResponseEntity<String> updateReview(@PathVariable("reviewId") Long reviewId, @RequestBody CreateReviewDto createReviewDto, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            reviewService.updateReview(reviewId, createReviewDto, account);
+            return ResponseEntity.ok("Review successfully updated!");
+        } catch (AccountRoleException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseEntity<String> deleteReview(@PathVariable("reviewId") Long reviewId, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            reviewService.deleteReview(reviewId, account);
+            return ResponseEntity.ok("Review successfully deleted!");
+        } catch (AccountRoleException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }
