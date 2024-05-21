@@ -34,7 +34,8 @@ INSERT INTO ACCOUNT_PRODUCT (account_id,product_id) VALUES (1,1);
 
 INSERT INTO REVIEW (rating,comment,review_date,reviewer_Id,reviewed_User_Id)
 VALUES
-    (5,'komentar','2024-01-24',1,2);
+    (5,'komentar','2024-01-24',1,2),
+    (4,'onako','2024-01-24',1,2);
 
 
 

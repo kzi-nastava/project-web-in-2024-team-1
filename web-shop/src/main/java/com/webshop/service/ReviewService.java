@@ -2,18 +2,21 @@ package com.webshop.service;
 
 import com.webshop.dto.CreateReviewDto;
 import com.webshop.exception.AccountNotFoundException;
+import com.webshop.exception.AccountRoleException;
 import com.webshop.exception.ReviewAndReviewedException;
 import com.webshop.model.Account;
 import com.webshop.model.Review;
 import com.webshop.model.Role;
 import com.webshop.repository.AccountRepository;
 import com.webshop.repository.ReviewRepository;
+import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -61,20 +64,6 @@ public class ReviewService {
         return reviewRepository.findByReviewedUserId(accountId);
     }
 
-    /*public List<Review> getMutualReviews(Long reviewerId) {
-        List<Review> mutualReviews = new ArrayList<>();
-        List<Review> reviewsGivenByReviewer = reviewRepository.findByReviewerId(reviewerId);
-        for(Review review : reviewsGivenByReviewer){
-            List<Review> reviewsFromReviewedUser = reviewRepository.findByReviewedUserId(review.getReviewedUser().getId());
-            for(Review r : reviewsFromReviewedUser){
-                if(r.getReviewedUser().getId().equals(reviewerId)){
-                    mutualReviews.add(review);
-                    break;
-                }
-            }
-        }
-        return  mutualReviews;
-    }*/
 
     public List<Review> getMutualReviews(Long reviewerId, Long reviewedUserId) {
         List<Review> reviewsGivenByReviewer = reviewRepository.findByReviewerIdAndReviewedUserId(reviewerId, reviewedUserId);
@@ -87,14 +76,45 @@ public class ReviewService {
         }
     }
 
-    /*public boolean chekIfMutual(Long reviewerId, Long reviewedUserId){
-        List<Review> reviewsGivenByReviewer = reviewRepository.findByReviewerId(reviewerId);
-        for(Review review : reviewsGivenByReviewer){
-            if(review.getReviewedUser().getId().equals(reviewedUserId)){
-                return true;
-            }
+    public List<Review> getAllReviews(Account currentAccount){
+        if(!isAdmin(currentAccount)){
+            throw new AccountRoleException("You do not have permission to view all reviews");
         }
-        return false;
-    }*/
+        return reviewRepository.findAll();
+    }
+
+    public void updateReview(Long reviewId, CreateReviewDto createReviewDto, Account currentAccount){
+        if (!isAdmin(currentAccount)) {
+            throw new AccountRoleException("You do not have permission to update this review");
+        }
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));
+        review.setRating(createReviewDto.getRating());
+        review.setComment(createReviewDto.getComment());
+        reviewRepository.save(review);
+    }
+
+    public void deleteReview(Long reviewId,Account currentAccount){
+        if (!isAdmin(currentAccount)) {
+            throw new AccountRoleException("You do not have permission to delete this review");
+        }
+        Optional<Review> reviewOptional = reviewRepository.findById(reviewId);
+        if(reviewOptional.isPresent()){
+            Review review = reviewOptional.get();
+            if(isAdmin(currentAccount) || review.getReviewer().equals(currentAccount)){
+                reviewRepository.delete(review);
+            } else{
+                throw new AccountRoleException("You do not have permission to delete this review");
+            }
+        } else{
+            throw new RuntimeException("Review not found");
+        }
+    }
+
+    private boolean isAdmin(Account account){
+        return account != null && account.getUserRole() == Role.ADMINISTRATOR;
+    }
+
+
 
 }
