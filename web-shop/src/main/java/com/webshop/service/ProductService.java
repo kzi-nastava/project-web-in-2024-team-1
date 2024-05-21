@@ -21,18 +21,18 @@ public class ProductService {
     public Product save(Product product) { return productRepository.save(product);}
     public Product findOne(Long id) { return productRepository.findById(id).orElse(null);}
 
-   public List<ProductDto> findProductByCategoryAndPriceAndSalesType(ProductFilterDto filterDto)
-   {
-       List<Product> products = productRepository.findProductByCategoryAndPriceAndSalesType(
-               filterDto.getStartPrice(),
-               filterDto.getEndPrice(),
-               filterDto.getCategoryName(),
-               filterDto.getSalesType()
-       );
-       List<ProductDto> productDtos = new ArrayList<>();
-       for (Product product : products) {
-           productDtos.add(new ProductDto(product));
-       }
-       return productDtos;
-   }
+//   public List<ProductDto> findProductByCategoryAndPriceAndSalesType(ProductFilterDto filterDto)
+//   {
+//       List<Product> products = productRepository.findProductByCategoryAndPriceAndSalesType(
+//               filterDto.getStartPrice(),
+//               filterDto.getEndPrice(),
+//               filterDto.getCategoryName(),
+//               filterDto.getSalesType()
+//       );
+//       List<ProductDto> productDtos = new ArrayList<>();
+//       for (Product product : products) {
+//           productDtos.add(new ProductDto(product));
+//       }
+//       return productDtos;
+//   }
 }
