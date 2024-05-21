@@ -70,5 +70,4 @@ public class ProductFilterDto
         this.salesType = salesType;
     }
 
-
 }
