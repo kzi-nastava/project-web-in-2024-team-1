@@ -101,11 +101,12 @@ public class ReviewService {
         Optional<Review> reviewOptional = reviewRepository.findById(reviewId);
         if(reviewOptional.isPresent()){
             Review review = reviewOptional.get();
-            if(isAdmin(currentAccount) || review.getReviewer().equals(currentAccount)){
+           /* if(isAdmin(currentAccount) || review.getReviewer().equals(currentAccount)){
                 reviewRepository.delete(review);
             } else{
                 throw new AccountRoleException("You do not have permission to delete this review");
-            }
+            }*/
+            reviewRepository.delete(review);
         } else{
             throw new RuntimeException("Review not found");
         }
