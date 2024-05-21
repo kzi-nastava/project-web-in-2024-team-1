@@ -60,6 +60,7 @@ public class Product implements Serializable
     @Column
     private ProductType productType;
 
+
     public Product() {
         this("", "", 1.0, SalesType.FIXED_PRICE, LocalDate.now(), "");
     }
