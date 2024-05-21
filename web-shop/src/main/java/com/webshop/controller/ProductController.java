@@ -91,9 +91,9 @@ public class ProductController
         } catch (Exception e){return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);}
     }
 
-    @PostMapping("/filter")
-    public ResponseEntity<List<ProductDto>> filterProducts(@RequestBody ProductFilterDto filterDto) {
-        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesType(filterDto);
-        return ResponseEntity.ok(productDtoList);
-    }
+//    @PostMapping("/filter")
+//    public ResponseEntity<List<ProductDto>> filterProducts(@RequestBody ProductFilterDto filterDto) {
+//        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesType(filterDto);
+//        return ResponseEntity.ok(productDtoList);
+//    }
 }
