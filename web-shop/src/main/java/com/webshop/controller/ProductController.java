@@ -3,6 +3,7 @@ package com.webshop.controller;
 import com.webshop.dto.ProductDto;
 import com.webshop.dto.ProductFilterDto;
 import com.webshop.exception.AccountNotFoundException;
+import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -96,4 +97,25 @@ public class ProductController
 //        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesType(filterDto);
 //        return ResponseEntity.ok(productDtoList);
 //    }
+
+    @PutMapping("product/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+        try {
+            Category category = productService.findCategoryByName(productDto.getCategoryName());
+
+            Product updatedProduct = new Product(
+                    productDto.getName(),
+                    productDto.getDescription(),
+                    productDto.getPrice(),
+                    productDto.getSalesType(),
+                    productDto.getReleaseDate(),
+                    productDto.getImagePath()
+            );
+            updatedProduct.setCategory(category);
+            productService.updateProduct(id, updatedProduct);
+            return new ResponseEntity<>("Product updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

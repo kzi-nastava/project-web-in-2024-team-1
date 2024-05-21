@@ -60,6 +60,7 @@ public class Product implements Serializable
     @Column
     private ProductType productType;
 
+
     public Product() {
         this("", "", 1.0, SalesType.FIXED_PRICE, LocalDate.now(), "");
     }
@@ -178,6 +179,10 @@ public class Product implements Serializable
 
     public void setOffers(List<Offer> offers) {
         this.offers = offers;
+    }
+
+    public boolean hasOffers() {
+        return offers != null && !offers.isEmpty();
     }
 
     @Override

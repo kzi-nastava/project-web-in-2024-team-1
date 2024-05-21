@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/")
 public class CategoryController
 {
-    @Autowired
-    private CategoryRepository categoryRepository;
+//    @Autowired
+//    private CategoryRepository categoryRepository;
 }
