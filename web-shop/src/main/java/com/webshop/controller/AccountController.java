@@ -69,6 +69,16 @@ public class AccountController {
         }
     }
 
+    @PostMapping("logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if(account == null) {
+            return new ResponseEntity<>("Account not found", HttpStatus.BAD_REQUEST);
+        }
+        accountService.logout(session);
+        return ResponseEntity.ok("Successfully logged out!");
+    }
+
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto, HttpSession session) {
         try{

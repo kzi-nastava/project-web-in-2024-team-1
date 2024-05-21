@@ -8,36 +8,36 @@ import java.util.Date;
 
 public class CreateReviewDto {
 
-    private int Rating;
+    private int rating;
 
-    private String Comment;
+    private String comment;
 
 
     public CreateReviewDto() {}
 
     public CreateReviewDto(int rating, String comment) {
-        this.Rating = rating;
-        this.Comment = comment;
+        this.rating = rating;
+        this.comment = comment;
     }
 
     public CreateReviewDto(Review review){
-        this.Rating = review.getRating();
-        this.Comment = review.getComment();
+        this.rating = review.getRating();
+        this.comment = review.getComment();
     }
 
     public int getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(int rating) {
-        Rating = rating;
+        this.rating = rating;
     }
 
     public String getComment() {
-        return Comment;
+        return comment;
     }
 
     public void setComment(String comment) {
-        Comment = comment;
+        this.comment = comment;
     }
 }

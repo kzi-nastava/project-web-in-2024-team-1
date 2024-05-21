@@ -13,6 +13,7 @@ import com.webshop.model.Review;
 import com.webshop.model.Role;
 import com.webshop.repository.AccountRepository;
 import com.webshop.repository.ReviewRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +94,10 @@ public class AccountService {
             throw new AuthenticationException("Wrong password");
         }
         return account.get();
+    }
+
+    public void logout(HttpSession session){
+        session.invalidate();
     }
 
     public void updateAccount(Long id, UpdateProfileBasicDto updateProfileBasicDto) {
