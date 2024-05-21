@@ -17,8 +17,8 @@ public class Offer implements Serializable
     private Double priceOffer;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Account account;
+    @JoinColumn(name = "customer_offer_id", referencedColumnName = "id")
+    private Account customerOfferId;
 
 
     public Offer()
@@ -49,21 +49,19 @@ public class Offer implements Serializable
 
 
     public Account getAccount() {
-        return account;
+        return customerOfferId;
     }
 
     public void setAccount(Account account) {
-        this.account = account;
+        this.customerOfferId = account;
     }
 
     @Override
     public String toString()
     {
-        String accountName = (account != null) ? account.getName() : "N/A";
         return "Offer{" +
                 "id=" + id +
                 ", PriceOffer=" + priceOffer +
-                ", accountName=" + accountName +
                 '}';
     }
 }
