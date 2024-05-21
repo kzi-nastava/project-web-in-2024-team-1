@@ -3,6 +3,8 @@ package com.webshop.controller;
 import com.webshop.dto.ProductDto;
 import com.webshop.dto.ProductFilterDto;
 import com.webshop.exception.AccountNotFoundException;
+import com.webshop.model.Account;
+import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -93,7 +95,20 @@ public class ProductController
 
 //    @PostMapping("/filter")
 //    public ResponseEntity<List<ProductDto>> filterProducts(@RequestBody ProductFilterDto filterDto) {
-//        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesType(filterDto);
+//        List<ProductDto> productDtoList = productService.findProductByCategoryAndPriceAndSalesTyp
+//        e(filterDto);
 //        return ResponseEntity.ok(productDtoList);
 //    }
+
+    @PutMapping("update-product/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto,HttpSession session ) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);}
+        try{
+            productService.updateProduct(id, productDto,account);
+            return new ResponseEntity<>("Product updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

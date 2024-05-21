@@ -41,7 +41,7 @@ public class ProductDto
         this.price = product.getPrice();
         this.imagePath = product.getImagePath();
         this.releaseDate = product.getReleaseDate();
-        this.categoryName=product.getCategory().getCategoryName();
+        this.categoryName = product.getCategory().getCategoryName();
         this.salesType=product.getSalesType();
     }
 
@@ -69,9 +69,9 @@ public class ProductDto
 
     public void setReleaseDate(LocalDate releaseDate) { this.releaseDate = releaseDate; }
 
-    public String getCategory() { return categoryName; }
+    public String getCategoryName() { return categoryName; }
 
-    public void setCategory(String category) { this.categoryName = category; }
+    public void setCategoryName(String category) { this.categoryName = category; }
 
     public SalesType getSalesType() { return salesType; }
 
