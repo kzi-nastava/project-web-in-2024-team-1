@@ -8,36 +8,32 @@ import java.util.Date;
 
 public class ReviewDto {
     private Long id;
-
-    private int Rating;
-
-    private String Comment;
-
-    private Date ReviewDate;
-
-    //private Account user;
-    private Account Reviewer;
-    private Account Review;
+    private int rating;
+    private String comment;
+    private Date reviewDate;
+    private Long reviewerId;
+    private Long reviewedUserId;
 
     public ReviewDto() {}
-    public ReviewDto(Long id, int Rating, String Comment, Date ReviewDate, Account Reviewer, Account Review) {
+    public ReviewDto(Long id, int rating, String comment, Date reviewDate, Long reviewedUserId) {
         this.id = id;
-        this.Rating = Rating;
-        this.Comment = Comment;
-        this.ReviewDate = ReviewDate;
-        this.Reviewer = Reviewer;
-        this.Review = Review;
+        this.rating = rating;
+        this.comment = comment;
+        this.reviewDate = reviewDate;
+        this.reviewedUserId = reviewedUserId;
+
     }
 
     public ReviewDto(Review review){
         this.id = review.getId();
-        this.Rating = review.getRating();
-        this.Comment = review.getComment();
-        this.ReviewDate = review.getReviewDate();
-        this.Reviewer = review.getReviewer();
-        this.Review = review.getReviewedUser();
-        //this.user = review.getReviewer();
+        this.rating = review.getRating();
+        this.comment = review.getComment();
+        this.reviewDate = review.getReviewDate();
+        this.reviewerId = review.getReviewer().getId();
+        this.reviewedUserId = review.getReviewedUser().getId();
     }
+
+
 
     public Long getId() {
         return id;
@@ -48,49 +44,42 @@ public class ReviewDto {
     }
 
     public int getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(int rating) {
-        Rating = rating;
+        this.rating = rating;
     }
 
     public String getComment() {
-        return Comment;
+        return comment;
     }
 
     public void setComment(String comment) {
-        Comment = comment;
+        this.comment = comment;
     }
 
     public Date getReviewDate() {
-        return ReviewDate;
+        return reviewDate;
     }
 
     public void setReviewDate(Date reviewDate) {
-        ReviewDate = reviewDate;
+        this.reviewDate = reviewDate;
     }
 
-   /* public Account getUser() {
-        return user;
+    public Long getReviewerId() {
+        return reviewerId;
     }
 
-    public void setUser(Account user) {
-        this.user = user;
-    }*/
-
-    public Account getReviewer() {
-        return Reviewer;
+    public void setReviewerId(Long reviewerId) {
+        this.reviewerId = reviewerId;
     }
 
-    public void setReviewer(Account reviewer) {
-        Reviewer = reviewer;
+    public Long getReviewedUserId() {
+        return reviewedUserId;
     }
 
-    public Account getReview() {
-        return Review;
-    }
-    public void setReview(Account review) {
-        Review = review;
+    public void setReviewedUserId(Long reviewedUserId) {
+        this.reviewedUserId = reviewedUserId;
     }
 }

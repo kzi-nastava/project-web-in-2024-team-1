@@ -32,9 +32,8 @@ public class ReviewController {
         if (account == null) {
             return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
         }
-        Long reviewerId = account.getId();
         try {
-            reviewService.createReview(reviewerId, createReviewDto,reviewedUserId);
+            reviewService.createReview(account.getId(), createReviewDto,reviewedUserId);
             return ResponseEntity.ok("Review successfully created!");
         } catch (AccountNotFoundException | ReviewAndReviewedException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -79,5 +78,40 @@ public class ReviewController {
         } catch (AccountNotFoundException e){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
+    }
+
+   /* @GetMapping("/mutual-reviews/{reviewedUserId}")
+    public ResponseEntity<List<ReviewDto>> getMutualReviews(@PathVariable("reviewedUserId") Long reviewedUserId, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+        Long accountId = account.getId();
+
+        boolean isMutual = reviewService.chekIfMutual(accountId, reviewedUserId);
+        if(!isMutual){
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+        List<Review> mutualReviews = reviewService.getMutualReviews(accountId);
+        List<ReviewDto> reviewDtoList = new ArrayList<>();
+        for (Review review : mutualReviews) {
+            reviewDtoList.add(new ReviewDto(review));
+        }
+        return ResponseEntity.ok(reviewDtoList);
+    }*/
+
+    @GetMapping("/mutual-reviews/{reviewedUserId}")
+    public ResponseEntity<List<ReviewDto>> getMutualReviews(@PathVariable("reviewedUserId") Long reviewedUserId, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+        Long accountId = account.getId();
+        List<Review> mutualReviews = reviewService.getMutualReviews(accountId, reviewedUserId);
+        List<ReviewDto> reviewDtoList = new ArrayList<>();
+        for (Review review : mutualReviews) {
+            reviewDtoList.add(new ReviewDto(review));
+        }
+        return ResponseEntity.ok(reviewDtoList);
     }
 }
