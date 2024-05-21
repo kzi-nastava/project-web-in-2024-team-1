@@ -1,9 +1,11 @@
 package com.webshop.service;
 
 import com.webshop.dto.ReportUserDto;
+import com.webshop.exception.AccountRoleException;
 import com.webshop.model.Account;
 import com.webshop.model.ReportStatus;
 import com.webshop.model.ReportUser;
+import com.webshop.model.Role;
 import com.webshop.repository.AccountRepository;
 import com.webshop.repository.ReportUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class ReportUserService {
     private ReportUserRepository reportUserRepository;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private ProductService productService;
 
 
     public ReportUserDto addReport(ReportUserDto reportUserDto) {
@@ -60,5 +64,34 @@ public class ReportUserService {
             reportUserDtos.add(reportUserDto);
         }
         return reportUserDtos;
+    }
+
+    public void acceptReport(Long reportId,Account currentAccount) {
+        if(!isAdmin(currentAccount)){
+            throw new AccountRoleException("You do not have permission to accept this request");
+        }
+        ReportUser reportUser = reportUserRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Report not found"));
+        reportUser.setStatus(ReportStatus.ACCEPTED);
+        reportUserRepository.save(reportUser);
+
+        Account reportedUser = reportUser.getReportedUser();
+        reportedUser.setBlocked(true);
+        accountRepository.save(reportedUser);
+        //reportUser.getReportedUser().setBlocked(true);
+
+    }
+
+    public void rejectReport(Long reportId,String rejectReason,Account currentAccount) {
+        if(!isAdmin(currentAccount)){
+            throw new AccountRoleException("You do not have permission to reject this request");
+        }
+        ReportUser reportUser = reportUserRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Report not found"));
+        reportUser.setStatus(ReportStatus.REJECTED);
+        reportUser.setReason(rejectReason);
+        reportUserRepository.save(reportUser);
+    }
+
+    public boolean isAdmin(Account account) {
+        return account != null && account.getUserRole() == Role.ADMINISTRATOR;
     }
 }
