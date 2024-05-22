@@ -14,21 +14,19 @@ public class ProductDto
     private String description;
     private Double price;
     private String imagePath;
-    private LocalDate releaseDate;
     private String categoryName;
     private SalesType salesType;
 
     public ProductDto(){}
 
-    public ProductDto(Long id, String name, String description, Double price, String imagePath,
-                      LocalDate releaseDate, String category, SalesType salesType)
+    public ProductDto(Long id, String name, String description, Double price, String imagePath
+                     , String category, SalesType salesType)
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imagePath = imagePath;
-        this.releaseDate = releaseDate;
         this.categoryName = category;
         this.salesType = salesType;
     }
@@ -40,7 +38,6 @@ public class ProductDto
         this.description = product.getDescription();
         this.price = product.getPrice();
         this.imagePath = product.getImagePath();
-        this.releaseDate = product.getReleaseDate();
         this.categoryName = product.getCategory().getCategoryName();
         this.salesType=product.getSalesType();
     }
@@ -64,10 +61,6 @@ public class ProductDto
     public String getImagePath() { return imagePath; }
 
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
-
-    public LocalDate getReleaseDate() { return releaseDate; }
-
-    public void setReleaseDate(LocalDate releaseDate) { this.releaseDate = releaseDate; }
 
     public String getCategoryName() { return categoryName; }
 
