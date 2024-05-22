@@ -1,6 +1,5 @@
 package com.webshop.service;
-import com.webshop.dto.ProductDto;
-import com.webshop.dto.ProductFilterDto;
+import com.webshop.dto.*;
 import com.webshop.exception.AccountRoleException;
 import com.webshop.exception.CategoryNotFoundException;
 import com.webshop.exception.ProductNotFoundException;
@@ -11,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -26,7 +27,13 @@ public class ProductService {
     public List<Product> findByDescription(String productDescription) {return productRepository.findByDescription(productDescription); }
     public List<Product> findAll() { return productRepository.findAll(); }
     public Product save(Product product) { return productRepository.save(product);}
-    public Product findOne(Long id) { return productRepository.findById(id).orElse(null);}
+    public Product findOne(Long id){
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isPresent()){
+            return product.get();
+        }
+        return null;
+    }
 
 
    public List<ProductDto> findProductByCategoryAndPriceAndSalesType(ProductFilterDto filterDto)
@@ -56,7 +63,7 @@ public class ProductService {
     public Product updateProduct(Long id, ProductDto updatedProduct, Account currentAccount) throws Exception {
 
         if (!isSeller(currentAccount)) {
-            throw new AccountRoleException("You do not have permission to update this review");
+            throw new AccountRoleException("You do not have permission to update this product");
         }
 
         Product existingProduct = productRepository.findById(id).orElse(null);
@@ -73,7 +80,6 @@ public class ProductService {
         existingProduct.setDescription(updatedProduct.getDescription());
         existingProduct.setImagePath(updatedProduct.getImagePath());
         existingProduct.setPrice(updatedProduct.getPrice());
-        existingProduct.setReleaseDate(updatedProduct.getReleaseDate());
         existingProduct.setSalesType(updatedProduct.getSalesType());
 
         return productRepository.save(existingProduct);
@@ -82,4 +88,27 @@ public class ProductService {
     private boolean isSeller(Account account){
         return account != null && account.getUserRole() == Role.SELLER;
     }
+
+    public void createProduct(CreateProductDto createProductDto, Account currentAccount){
+
+        if (!isSeller(currentAccount)) {
+            throw new AccountRoleException("You do not have permission create a product");
+        }
+
+        String categoryName = createProductDto.getCategoryName();
+        Category category = categoryRepository.findByCategoryName(categoryName)
+                .orElseGet(() -> categoryRepository.save(new Category(categoryName)));
+
+        Product product = new Product();
+        product.setName(createProductDto.getName());
+        product.setDescription(createProductDto.getDescription());
+        product.setImagePath(createProductDto.getImagePath());
+        product.setPrice(createProductDto.getPrice());
+        product.setCategory(category);
+        product.setSalesType(createProductDto.getSalesType());
+        product.setReleaseDate(new Date());
+        productRepository.save(product);
+    }
+
+
 }
