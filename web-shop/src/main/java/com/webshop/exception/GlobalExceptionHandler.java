@@ -57,8 +57,29 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
+
+    @ExceptionHandler(InvalidBidException.class)
+    public ResponseEntity<String> handleInvalidBidException(InvalidBidException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductIsSoldException.class)
+    public ResponseEntity<String> handleProductIsSoldException(ProductIsSoldException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuctionNotActiveException.class)
+    public ResponseEntity<String> handleAuctionNotActiveException(AuctionNotActiveException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SalesTypeException.class)
+    public ResponseEntity<String> handleSalesTypeException(SalesTypeException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+
     @ExceptionHandler(OfferNotFoundException.class)
     public ResponseEntity<String> handleOfferNotFoundException(OfferNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+
     }
 }

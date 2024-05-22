@@ -5,6 +5,7 @@ import com.webshop.dto.CreateCategoryDto;
 import com.webshop.exception.AccountNotFoundException;
 import com.webshop.exception.CategoryNotFoundException;
 import com.webshop.model.Account;
+import com.webshop.model.Category;
 import com.webshop.service.CategoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/category/")
@@ -23,6 +25,29 @@ public class CategoryController
 
     @GetMapping("all")
     public List<CategoryDto> getAllCategorys(){return categoryService.getAllCategorys();}
+
+    @GetMapping("getByName")
+    public ResponseEntity<?> searchCategoryByName(@RequestParam String categoryName) {
+       Optional<Category> category = categoryService.findByCategoryName(categoryName);
+        if (category.isPresent()) {
+            return ResponseEntity.ok(category.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    //all categories with products
+    @GetMapping("with-products")
+    public List<CategoryDto> getAllCategoriesWithProducts() {
+        return categoryService.getAllCategoriesWithProducts();
+    }
+
+    //one specific category
+    @GetMapping("category-with-products")
+    public ResponseEntity<CategoryDto> getCategoryWithProducts(@RequestParam String categoryName) {
+        CategoryDto categoryDto = categoryService.getCategoryWithProducts(categoryName);
+        return ResponseEntity.ok(categoryDto);
+    }
+
 
     @PostMapping("create-category")
     public ResponseEntity<String>createCategory(@RequestBody CreateCategoryDto createCategoryDto, HttpSession session){

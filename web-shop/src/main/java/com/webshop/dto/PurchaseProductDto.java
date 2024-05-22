@@ -11,6 +11,7 @@ public class PurchaseProductDto {
     private Boolean isSold=true;
     private List<PurchaseProductDto> purchaseProducts;
 
+
     public PurchaseProductDto() { }
 
     public PurchaseProductDto(String productName, Double price, String imagePath, Boolean isSold) {
@@ -64,8 +65,8 @@ public class PurchaseProductDto {
     }
 
     public void setPurchaseProducts(List<PurchaseProductDto> purchaseProducts) {
+
         this.purchaseProducts = purchaseProducts;
     }
-
 
 }

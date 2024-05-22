@@ -2,7 +2,6 @@ package com.webshop.model;
 
 import jakarta.persistence.*;
 
-import java.beans.ConstructorProperties;
 import java.io.Serializable;
 
 @Entity

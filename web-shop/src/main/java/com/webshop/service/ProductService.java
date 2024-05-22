@@ -1,8 +1,6 @@
 package com.webshop.service;
 import com.webshop.dto.*;
-import com.webshop.exception.AccountRoleException;
-import com.webshop.exception.CategoryNotFoundException;
-import com.webshop.exception.ProductNotFoundException;
+import com.webshop.exception.*;
 import com.webshop.model.*;
 import com.webshop.repository.CategoryRepository;
 import com.webshop.repository.OfferRepository;
@@ -38,24 +36,118 @@ public class ProductService {
         return null;
     }
 
+    //pocetak metoda za filtriranje
+    public List<ProductDto> findProductByFilter(ProductFilterDto filterDto) {
+        if (filterDto.getCategoryName() != null && filterDto.getStartPrice() != null && filterDto.getEndPrice() != null && filterDto.getSalesType() != null) {
+            return findByCategoryAndPriceAndSalesType(filterDto);
+        } else if (filterDto.getCategoryName() != null && filterDto.getStartPrice() != null && filterDto.getEndPrice() != null) {
+            return findByCategoryAndPrice(filterDto);
+        } else if (filterDto.getCategoryName() != null && filterDto.getSalesType() != null) {
+            return findByCategoryAndSalesType(filterDto);
+        } else if (filterDto.getStartPrice() != null && filterDto.getEndPrice() != null && filterDto.getSalesType() != null) {
+            return findByPriceAndSalesType(filterDto);
+        } else if (filterDto.getCategoryName() != null) {
+            return findByCategory(filterDto);
+        } else if (filterDto.getStartPrice() != null && filterDto.getEndPrice() != null) {
+            return findByPrice(filterDto);
+        } else if (filterDto.getSalesType() != null) {
+            return findBySalesType(filterDto);
+        } else {
+            return findAllProducts();
+        }
+    }
+    private List<ProductDto> findAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return mapProductsToDto(products);
+    }
+    public List<ProductDto> findByCategoryAndPriceAndSalesType(ProductFilterDto filterDto) {
+        List<Product> products = productRepository.findByCategory_CategoryNameAndPriceBetweenAndSalesType(
+                filterDto.getCategoryName(),
+                filterDto.getStartPrice(),
+                filterDto.getEndPrice(),
+                filterDto.getSalesType()
+        );
+        return mapProductsToDto(products);
+    }
 
-   public List<ProductDto> findProductByCategoryAndPriceAndSalesType(ProductFilterDto filterDto)
-   {
-       /*List<Product> products = productRepository.findProductByCategoryAndPriceAndSalesType(
-               filterDto.getStartPrice(),
-               filterDto.getEndPrice(),
-               filterDto.getCategoryName(),
-               filterDto.getSalesType()
-       );*/
-       List<ProductDto> productDtos = new ArrayList<>();
-       /*for (Product product : products) {
-           productDtos.add(new ProductDto(product));
-       }*/
-       return productDtos;
-   }
+    public List<ProductDto> findByCategoryAndPrice(ProductFilterDto filterDto) {
+        List<Product> products = productRepository.findByCategory_CategoryNameAndPriceBetween(
+                filterDto.getCategoryName(),
+                filterDto.getStartPrice(),
+                filterDto.getEndPrice()
+        );
+        return mapProductsToDto(products);
+    }
 
-    public Category findCategoryByName(String categoryName){
-        return categoryRepository.findByCategoryName(categoryName).orElseThrow(() ->new CategoryNotFoundException("Category not found"));
+    public List<ProductDto> findByCategoryAndSalesType(ProductFilterDto filterDto) {
+        List<Product> products = productRepository.findByCategory_CategoryNameAndSalesType(
+                filterDto.getCategoryName(),
+                filterDto.getSalesType()
+        );
+        return mapProductsToDto(products);
+    }
+
+    public List<ProductDto> findByPriceAndSalesType(ProductFilterDto filterDto) {
+        List<Product> products = productRepository.findByPriceBetweenAndSalesType(
+                filterDto.getStartPrice(),
+                filterDto.getEndPrice(),
+                filterDto.getSalesType()
+        );
+        return mapProductsToDto(products);
+    }
+
+    public List<ProductDto> findByCategory(ProductFilterDto filterDto) {
+        List<Product> products = productRepository.findByCategory_CategoryName(filterDto.getCategoryName());
+        return mapProductsToDto(products);
+    }
+
+    public List<ProductDto> findByPrice(ProductFilterDto filterDto) {
+        // Check if both start and end prices are provided
+        if (filterDto.getStartPrice() != null && filterDto.getEndPrice() != null) {
+            // Ensure that start price is less than or equal to end price
+            if (filterDto.getStartPrice() <= filterDto.getEndPrice()) {
+                // Retrieve products within the specified price range
+                List<Product> products = productRepository.findByPriceBetween(
+                        filterDto.getStartPrice(),
+                        filterDto.getEndPrice()
+                );
+                // Map the retrieved products to DTOs and filter out products with prices outside the range
+                List<ProductDto> filteredProducts = new ArrayList<>();
+                for (Product product : products) {
+                    if (product.getPrice() >= filterDto.getStartPrice() && product.getPrice() <= filterDto.getEndPrice()) {
+                        filteredProducts.add(new ProductDto(product));
+                    }
+                }
+                return filteredProducts;
+            } else {
+                // If start price is greater than end price, return an empty list
+                return new ArrayList<>();
+            }
+        } else {
+            // If start and end prices are not both provided, return an empty list
+            return new ArrayList<>();
+        }
+    }
+
+
+    public List<ProductDto> findBySalesType(ProductFilterDto filterDto) {
+        List<Product> products = productRepository.findBySalesType(filterDto.getSalesType());
+        return mapProductsToDto(products);
+    }
+
+    // Helper method to map Product entities to ProductDto
+    private List<ProductDto> mapProductsToDto(List<Product> products) {
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product product : products) {
+            ProductDto productDto = new ProductDto(product);
+            productDtos.add(new ProductDto(product));
+        }
+        return productDtos;
+    }
+
+//kraj metode za filtriranje
+    public List<Product> findProductsByCategoryName(String categoryName) {
+        return productRepository.findByCategory_CategoryName(categoryName);
     }
 
     public boolean hasOffers(Long productId) throws Exception {
@@ -97,6 +189,7 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
+
     public void createProduct(CreateProductDto createProductDto, Account currentAccount){
 
         if (!isSeller(currentAccount)) {
@@ -119,6 +212,7 @@ public class ProductService {
         product.setProductType(ProductType.FOR_SALE);
         productRepository.save(product);
     }
+
 
 
     public void purchaseProduct(PurchaseProductDto purchaseProductDto, Account currentAccount,Long productId) {
@@ -247,4 +341,6 @@ public class ProductService {
 
 
 
+
 }
+
