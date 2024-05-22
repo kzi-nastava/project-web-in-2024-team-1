@@ -1,8 +1,6 @@
 package com.webshop.service;
 import com.webshop.dto.*;
-import com.webshop.exception.AccountRoleException;
-import com.webshop.exception.CategoryNotFoundException;
-import com.webshop.exception.ProductNotFoundException;
+import com.webshop.exception.*;
 import com.webshop.model.*;
 import com.webshop.repository.CategoryRepository;
 import com.webshop.repository.ProductRepository;
@@ -114,26 +112,67 @@ public class ProductService {
     }
 
 
-    public void purchaseProduct(PurchaseProductDto purchaseProductDto, Account currentAccount,Long productId) {
+    public void purchaseProduct(PurchaseProductDto purchaseProductDto, Account currentAccount,Long productId,OfferDto offerDto) {
 
         if (!isCustomer(currentAccount)) {
             throw new AccountRoleException("You do not have permission purchase a product");
         }
 
-        Product product = productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("Product not found"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
         if (product.getSalesType() == SalesType.FIXED_PRICE) {
-            PurchaseProductDto purchase = new PurchaseProductDto();
-            purchase.setProductName(purchaseProductDto.getProductName());
-            purchase.setPrice(purchaseProductDto.getPrice());
-            purchase.setImagePath(purchaseProductDto.getImagePath());
-            purchase.setSold(purchaseProductDto.getSold());
-        }else{
-add .        }
+            if (product.getSold() == false) {
+                product.setSold(true);
+                productRepository.save(product);
+                purchaseProductDto.setProductName(product.getName());
+                purchaseProductDto.setPrice(product.getPrice());
+                purchaseProductDto.setImagePath(product.getImagePath());
+                purchaseProductDto.setSold(true);
 
-    }
+                if(purchaseProductDto.getPurchaseProducts() == null){
+                    purchaseProductDto.setPurchaseProducts(new ArrayList<>());
+                }
+                purchaseProductDto.getPurchaseProducts().add(new PurchaseProductDto(product.getName(),product.getPrice(),product.getImagePath(),product.getSold()));
 
+            } else {
+                throw new ProductIsSoldException("Product already purchased");
+            }
 
+        } else if (product.getSalesType() == SalesType.AUCTION) {
+            if (isAuctionAvailable(product)) {
+                if (offerDto.getPriceOffer() > offerDto.getCurrentPrice()) {
+                    offerDto.setCurrentPrice(offerDto.getPriceOffer());
+                    Offer offer = new Offer();
+                    offer.setPriceOffer(offerDto.getPriceOffer());
 
+                    offer.setAccount(currentAccount);
 
+                    product.getOffers().add(offer);
+                    product.setPrice(offerDto.getCurrentPrice());
+                    productRepository.save(product);
+                    if (product.getSold() == false) {
+                        product.setSold(true);
+                        productRepository.save(product);
+                        purchaseProductDto.setProductName(product.getName());
+                        purchaseProductDto.setPrice(product.getPrice());
+                        purchaseProductDto.setImagePath(product.getImagePath());
+                        purchaseProductDto.setSold(true);
 
+                        if (purchaseProductDto.getPurchaseProducts() == null) {
+                            purchaseProductDto.setPurchaseProducts(new ArrayList<>());
+                        }
+                        purchaseProductDto.getPurchaseProducts().add(new PurchaseProductDto(product.getName(), product.getPrice(), product.getImagePath(), product.getSold()));
+
+                    }
+
+                } else {
+                    throw new InvalidBidException("Your bid must be higher than the current price");
+                }
+            } else {
+                throw new AuctionNotActiveException("The auction is not active");
+            }
+        }else{ throw new SalesTypeException("This sales type is not supported for purchase"); }
 }
+    private boolean isAuctionAvailable(Product product){
+        return product.getSalesType().equals(SalesType.AUCTION) && product.getSold().equals(false);}
+}
+
