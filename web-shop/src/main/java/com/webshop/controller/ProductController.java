@@ -62,6 +62,36 @@ public class ProductController
         return ResponseEntity.ok(productDto);
     }
 
+    @GetMapping("/filter-products")
+    public ResponseEntity<List<ProductDto>> filterProducts(@RequestParam(value = "categoryName", required = false) String categoryName,
+                                                           @RequestParam(value = "startPrice", required = false) Double startPrice,
+                                                           @RequestParam(value = "endPrice", required = false) Double endPrice,
+                                                           @RequestParam(value = "salesType", required = false) String salesType) {
+        try {
+            // Create a ProductFilterDto object with the provided parameters
+            ProductFilterDto filterDto = new ProductFilterDto();
+            filterDto.setCategoryName(categoryName);
+            filterDto.setStartPrice(startPrice);
+            filterDto.setEndPrice(endPrice);
+            // Parse the SalesType string to the enum type
+            filterDto.setSalesType(salesType != null ? SalesType.valueOf(salesType.toUpperCase()) : null);
+
+            // Call the service method to filter products
+            List<ProductDto> filteredProducts = productService.findProductByFilter(filterDto);
+
+            if (filteredProducts.isEmpty()) {
+                // Return 404 Not Found if no products match the criteria
+                return ResponseEntity.notFound().build();
+            }
+
+            // Return the filtered products
+            return ResponseEntity.ok(filteredProducts);
+        } catch (Exception e) {
+            // Return a 500 Internal Server Error with the exception message
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @GetMapping("/search-by-name")
     public ResponseEntity<List<ProductDto>> getProductByName(@RequestParam("name") String productName) {
         List<ProductDto> productDtoList = new ArrayList<>();
