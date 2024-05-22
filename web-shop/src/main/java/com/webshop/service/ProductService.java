@@ -60,6 +60,13 @@ public class ProductService {
         return product.getOffers() != null && !product.getOffers().isEmpty();
     }
 
+
+    private boolean isSeller(Account account){return account != null && account.getUserRole() == Role.SELLER;}
+
+    private boolean isCustomer(Account account){return account != null && account.getUserRole() == Role.CUSTOMER; }
+
+
+
     public Product updateProduct(Long id, ProductDto updatedProduct, Account currentAccount) throws Exception {
 
         if (!isSeller(currentAccount)) {
@@ -85,10 +92,6 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
-    private boolean isSeller(Account account){
-        return account != null && account.getUserRole() == Role.SELLER;
-    }
-
     public void createProduct(CreateProductDto createProductDto, Account currentAccount){
 
         if (!isSeller(currentAccount)) {
@@ -109,6 +112,28 @@ public class ProductService {
         product.setReleaseDate(new Date());
         productRepository.save(product);
     }
+
+
+    public void purchaseProduct(PurchaseProductDto purchaseProductDto, Account currentAccount,Long productId) {
+
+        if (!isCustomer(currentAccount)) {
+            throw new AccountRoleException("You do not have permission purchase a product");
+        }
+
+        Product product = productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("Product not found"));
+        if (product.getSalesType() == SalesType.FIXED_PRICE) {
+            PurchaseProductDto purchase = new PurchaseProductDto();
+            purchase.setProductName(purchaseProductDto.getProductName());
+            purchase.setPrice(purchaseProductDto.getPrice());
+            purchase.setImagePath(purchaseProductDto.getImagePath());
+            purchase.setSold(purchaseProductDto.getSold());
+        }else{
+add .        }
+
+    }
+
+
+
 
 
 }
