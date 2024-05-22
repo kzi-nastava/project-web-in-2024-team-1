@@ -35,11 +35,13 @@ public class CategoryController
             return ResponseEntity.notFound().build();
         }
     }
+    //all categories with products
     @GetMapping("with-products")
     public List<CategoryDto> getAllCategoriesWithProducts() {
         return categoryService.getAllCategoriesWithProducts();
     }
 
+    //one specific category
     @GetMapping("category-with-products")
     public ResponseEntity<CategoryDto> getCategoryWithProducts(@RequestParam String categoryName) {
         CategoryDto categoryDto = categoryService.getCategoryWithProducts(categoryName);
