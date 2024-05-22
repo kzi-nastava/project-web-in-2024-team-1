@@ -53,6 +53,10 @@ public class ProductService {
         return categoryRepository.findByCategoryName(categoryName).orElseThrow(() ->new CategoryNotFoundException("Category not found"));
     }
 
+    public List<Product> findProductsByCategoryName(String categoryName) {
+        return productRepository.findByCategory_CategoryName(categoryName);
+    }
+
     public boolean hasOffers(Long productId) throws Exception {
         Product product = productRepository.findById(productId).orElseThrow(() -> new Exception("Product not found"));
         return product.getOffers() != null && !product.getOffers().isEmpty();
