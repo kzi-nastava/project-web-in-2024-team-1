@@ -1,5 +1,6 @@
 package com.webshop.repository;
 
+import com.webshop.model.Account;
 import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
@@ -13,6 +14,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 {
     List<Product> findByName(String name);
     List<Product> findByDescription(String description);
+    List<Product> findByBuyer(Account buyer);
+    List<Product> findBySeller(Account seller);
 
     //List<Product> findProductByCategoryAndPriceAndSalesType(Double startPrice, Double endPrice, String categoryName, SalesType salesType);
 }

@@ -5,6 +5,7 @@ import com.webshop.exception.CategoryNotFoundException;
 import com.webshop.exception.ProductNotFoundException;
 import com.webshop.model.*;
 import com.webshop.repository.CategoryRepository;
+import com.webshop.repository.OfferRepository;
 import com.webshop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ public class ProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private OfferRepository offerRepository;
 
     public List<Product> findByName(String productName) {return productRepository.findByName(productName);}
     public List<Product> findByDescription(String productDescription) {return productRepository.findByDescription(productDescription); }
@@ -65,7 +68,9 @@ public class ProductService {
 
     private boolean isCustomer(Account account){return account != null && account.getUserRole() == Role.CUSTOMER; }
 
-
+    private boolean isAuctionAvailable(Product product){
+        return product.getSalesType().equals(SalesType.AUCTION) && product.getSold().equals(false);
+    }
 
     public Product updateProduct(Long id, ProductDto updatedProduct, Account currentAccount) throws Exception {
 
@@ -110,6 +115,8 @@ public class ProductService {
         product.setCategory(category);
         product.setSalesType(createProductDto.getSalesType());
         product.setReleaseDate(new Date());
+        product.setSold(false);
+        product.setProductType(ProductType.FOR_SALE);
         productRepository.save(product);
     }
 
@@ -120,18 +127,122 @@ public class ProductService {
             throw new AccountRoleException("You do not have permission purchase a product");
         }
 
-        Product product = productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("Product not found"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
         if (product.getSalesType() == SalesType.FIXED_PRICE) {
-            PurchaseProductDto purchase = new PurchaseProductDto();
-            purchase.setProductName(purchaseProductDto.getProductName());
-            purchase.setPrice(purchaseProductDto.getPrice());
-            purchase.setImagePath(purchaseProductDto.getImagePath());
-            purchase.setSold(purchaseProductDto.getSold());
-        }else{
-add .        }
+            if (product.getSold() == false) {
+                product.setSold(true);
+                product.setProductType(ProductType.PURCHASED);
+                product.setBuyer(currentAccount);
+                productRepository.save(product);
+                purchaseProductDto.setProductName(product.getName());
+                purchaseProductDto.setPrice(product.getPrice());
+                purchaseProductDto.setImagePath(product.getImagePath());
+                purchaseProductDto.setSold(true);
 
+                if (purchaseProductDto.getPurchaseProducts() == null) {
+                    purchaseProductDto.setPurchaseProducts(new ArrayList<>());
+                }
+                purchaseProductDto.getPurchaseProducts().add(new PurchaseProductDto(product.getName(), product.getPrice(), product.getImagePath(), product.getSold()));
+
+            } else {
+                throw new ProductNotFoundException("Product already purchased");
+            }
+
+        }
     }
 
+    public List<PurchaseProductDto> getPurchaseProducts(Account currentAccount) {
+        List<Product> products = productRepository.findByBuyer(currentAccount);
+        List<PurchaseProductDto> purchaseProductDtos = new ArrayList<>();
+        for (Product product : products) {
+            PurchaseProductDto purchaseProductDto = new PurchaseProductDto(
+                    product.getName(),
+                    product.getPrice(),
+                    product.getImagePath(),
+                    product.getSold()
+            );
+            purchaseProductDtos.add(purchaseProductDto);
+        }
+        return purchaseProductDtos;
+    }
+
+    public List<PuchaseActionDto> getPurchaseActions(Account currentAccount) {
+        if (!isCustomer(currentAccount)) {
+            throw new AccountRoleException("You do not have permission");
+        }
+        List<Product> products = productRepository.findByBuyer(currentAccount);
+        List<PuchaseActionDto> purchaseActionDtos = new ArrayList<>();
+
+        for (Product product : products) {
+            PuchaseActionDto purchaseActionDto = new PuchaseActionDto();
+            purchaseActionDto.setId(product.getId());
+
+            if(product.getProductType() == ProductType.PURCHASED && product.getBuyer().equals(currentAccount)) {
+                purchaseActionDto.setMessage("You have purchased a product");
+            }
+            purchaseActionDtos.add(purchaseActionDto);
+        }
+        return purchaseActionDtos;
+    }
+
+    public List<PuchaseActionDto> getSaleActions(Account currentAccount) {
+        if (!isSeller(currentAccount)) {
+            throw new AccountRoleException("You do not have permission");
+        }
+
+        List<Product> soldProducts = productRepository.findBySeller(currentAccount);
+        List<PuchaseActionDto> saleActionDtos = new ArrayList<>();
+
+        for (Product product : soldProducts) {
+            PuchaseActionDto saleActionDto = new PuchaseActionDto();
+            saleActionDto.setId(product.getId());
+
+            if (product.getProductType() == ProductType.PURCHASED) {
+                saleActionDto.setMessage("You have sold a product");
+            }
+            saleActionDtos.add(saleActionDto);
+        }
+        return saleActionDtos;
+    }
+
+
+
+    public void auctionProduct(Account currentAccount,Long productId,OfferDto offerDto) {
+
+        if (!isCustomer(currentAccount)) {
+            throw new AccountRoleException("You do not have permission purchase a product");
+        }
+
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        if (product.getSalesType() == SalesType.AUCTION) {
+            if (isAuctionAvailable(product)) {
+                double currentPrice = product.getPrice();
+                if ( offerDto.getPriceOffer() > currentPrice) {
+                    Offer offer = new Offer();
+                    offer.setPriceOffer(offerDto.getPriceOffer());
+                    offer.setCurrentPrice(currentPrice);
+
+                    offer.setAccount(currentAccount);
+
+                    product.getOffers().add(offer);
+                    //offerRepository.save(offer);
+                    productRepository.save(product);
+
+                    offerDto.setCurrentPrice(currentPrice);
+                    offerDto.setPriceOffer(offerDto.getPriceOffer());
+
+
+                } else {
+                    //throw new InvalidBidException("Your bid must be higher than the current price");
+                    throw new ProductNotFoundException("Your bid must be higher than the current price");
+                }
+            } else {
+                //throw new AuctionNotActiveException("The auction is not active");
+                throw new ProductNotFoundException("The auction is not active");
+            }
+
+        }
+    }
 
 
 

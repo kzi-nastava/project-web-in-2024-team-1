@@ -17,8 +17,9 @@ public class OfferDto {
     }
 
     public OfferDto(Offer offer) {
-        this.priceOffer=priceOffer;
-        this.customerOfferId=customerOfferId;
+        this.currentPrice = offer.getCurrentPrice();
+        this.priceOffer= offer.getPriceOffer();
+        this.customerOfferId= offer.getAccount().getId();
     }
 
     public Double getCurrentPrice() {

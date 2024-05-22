@@ -56,4 +56,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(OfferNotFoundException.class)
+    public ResponseEntity<String> handleOfferNotFoundException(OfferNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
