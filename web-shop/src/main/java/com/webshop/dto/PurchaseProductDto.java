@@ -2,11 +2,15 @@ package com.webshop.dto;
 
 import com.webshop.model.Product;
 
+import java.util.List;
+
 public class PurchaseProductDto {
     private String productName;
     private Double price;
     private String imagePath;
     private Boolean isSold=true;
+    private List<PurchaseProductDto> purchaseProducts;
+
 
     public PurchaseProductDto() { }
 
@@ -55,4 +59,11 @@ public class PurchaseProductDto {
     public void setSold(Boolean sold) {
         isSold = sold;
     }
+
+    public List<PurchaseProductDto> getPurchaseProducts() {
+        return purchaseProducts;
+    }
+
+    public void setPurchaseProducts(List<PurchaseProductDto> purchaseProducts) {
+        this.purchaseProducts = purchaseProducts;}
 }

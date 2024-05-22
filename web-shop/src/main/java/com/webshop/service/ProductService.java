@@ -1,8 +1,6 @@
 package com.webshop.service;
 import com.webshop.dto.*;
-import com.webshop.exception.AccountRoleException;
-import com.webshop.exception.CategoryNotFoundException;
-import com.webshop.exception.ProductNotFoundException;
+import com.webshop.exception.*;
 import com.webshop.model.*;
 import com.webshop.repository.CategoryRepository;
 import com.webshop.repository.ProductRepository;
@@ -36,23 +34,13 @@ public class ProductService {
     }
 
 
-   public List<ProductDto> findProductByCategoryAndPriceAndSalesType(ProductFilterDto filterDto)
-   {
-       /*List<Product> products = productRepository.findProductByCategoryAndPriceAndSalesType(
-               filterDto.getStartPrice(),
-               filterDto.getEndPrice(),
-               filterDto.getCategoryName(),
-               filterDto.getSalesType()
-       );*/
-       List<ProductDto> productDtos = new ArrayList<>();
-       /*for (Product product : products) {
-           productDtos.add(new ProductDto(product));
-       }*/
-       return productDtos;
-   }
 
     public Category findCategoryByName(String categoryName){
         return categoryRepository.findByCategoryName(categoryName).orElseThrow(() ->new CategoryNotFoundException("Category not found"));
+    }
+
+    public List<Product> findProductsByCategoryName(String categoryName) {
+        return productRepository.findByCategory_CategoryName(categoryName);
     }
 
     public boolean hasOffers(Long productId) throws Exception {
@@ -92,6 +80,7 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
+
     public void createProduct(CreateProductDto createProductDto, Account currentAccount){
 
         if (!isSeller(currentAccount)) {
@@ -114,26 +103,5 @@ public class ProductService {
     }
 
 
-    public void purchaseProduct(PurchaseProductDto purchaseProductDto, Account currentAccount,Long productId) {
-
-        if (!isCustomer(currentAccount)) {
-            throw new AccountRoleException("You do not have permission purchase a product");
-        }
-
-        Product product = productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("Product not found"));
-        if (product.getSalesType() == SalesType.FIXED_PRICE) {
-            PurchaseProductDto purchase = new PurchaseProductDto();
-            purchase.setProductName(purchaseProductDto.getProductName());
-            purchase.setPrice(purchaseProductDto.getPrice());
-            purchase.setImagePath(purchaseProductDto.getImagePath());
-            purchase.setSold(purchaseProductDto.getSold());
-        }else{
-add .        }
-
-    }
-
-
-
-
-
 }
+
