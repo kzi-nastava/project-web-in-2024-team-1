@@ -33,11 +33,7 @@ public class ProductService {
         return null;
     }
 
-    private boolean isPriceInRange(Double productPrice, Double startPrice, Double endPrice) {
-        // Check if the product price is between the start and end prices
-        return productPrice >= startPrice && productPrice <= endPrice;
-    }
-
+    //pocetak metoda za filtriranje
     public List<ProductDto> findProductByFilter(ProductFilterDto filterDto) {
         if (filterDto.getCategoryName() != null && filterDto.getStartPrice() != null && filterDto.getEndPrice() != null && filterDto.getSalesType() != null) {
             return findByCategoryAndPriceAndSalesType(filterDto);
@@ -146,10 +142,7 @@ public class ProductService {
         return productDtos;
     }
 
-    public Category findCategoryByName(String categoryName){
-        return categoryRepository.findByCategoryName(categoryName).orElseThrow(() ->new CategoryNotFoundException("Category not found"));
-    }
-
+//kraj metode za filtriranje
     public List<Product> findProductsByCategoryName(String categoryName) {
         return productRepository.findByCategory_CategoryName(categoryName);
     }
