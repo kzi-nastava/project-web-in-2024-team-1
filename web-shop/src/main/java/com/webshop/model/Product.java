@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -35,7 +36,7 @@ public class Product implements Serializable
 
     @Temporal(TemporalType.DATE)
     @Column
-    private LocalDate releaseDate;
+    private Date releaseDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -62,11 +63,11 @@ public class Product implements Serializable
 
 
     public Product() {
-        this("", "", 1.0, SalesType.FIXED_PRICE, LocalDate.now(), "");
+        this("", "", 1.0, SalesType.FIXED_PRICE, new Date(), "");
     }
 
     public Product(String name, String description, Double price,
-                   SalesType salesType, LocalDate releaseDate, String imagePath)
+                   SalesType salesType, Date releaseDate, String imagePath)
     {
         this.name = name;
         this.description = description;
@@ -124,11 +125,11 @@ public class Product implements Serializable
         this.salesType = salesType;
     }
 
-    public LocalDate getReleaseDate() {
+    public Date getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
+    public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 

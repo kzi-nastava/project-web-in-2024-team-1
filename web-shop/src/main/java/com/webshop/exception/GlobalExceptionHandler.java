@@ -52,4 +52,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String>handleProductNotFoundException(ProductNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<String> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }
