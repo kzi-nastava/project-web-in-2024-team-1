@@ -42,7 +42,7 @@ public class Product implements Serializable
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "PRODUCT_OFFERS",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "offer_id"))
@@ -60,6 +60,14 @@ public class Product implements Serializable
     @Enumerated(EnumType.STRING)
     @Column
     private ProductType productType;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+    @JoinColumn(name="buyer_id")
+    private Account buyer;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+    @JoinColumn(name="seller_id")
+    private Account seller;
 
 
     public Product() {
@@ -180,6 +188,22 @@ public class Product implements Serializable
 
     public void setOffers(List<Offer> offers) {
         this.offers = offers;
+    }
+
+    public Account getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Account buyer) {
+        this.buyer = buyer;
+    }
+
+    public Account getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Account seller) {
+        this.seller = seller;
     }
 
     @Override

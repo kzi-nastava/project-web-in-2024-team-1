@@ -65,5 +65,8 @@ public class PurchaseProductDto {
     }
 
     public void setPurchaseProducts(List<PurchaseProductDto> purchaseProducts) {
-        this.purchaseProducts = purchaseProducts;}
+
+        this.purchaseProducts = purchaseProducts;
+    }
+
 }

@@ -15,6 +15,8 @@ public class Offer implements Serializable
     @Column
     private Double priceOffer;
 
+    @Column Double currentPrice;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_offer_id", referencedColumnName = "id")
     private Account customerOfferId;
@@ -22,13 +24,15 @@ public class Offer implements Serializable
 
     public Offer()
     {
-        this(1.0);
+        this(1.0,1.0);
     }
 
-    public Offer(Double priceOffer)
+    public Offer(Double priceOffer,Double currentPrice)
     {
         this.priceOffer = priceOffer;
+        this.currentPrice = currentPrice;
     }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -55,12 +59,20 @@ public class Offer implements Serializable
         this.customerOfferId = account;
     }
 
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     @Override
     public String toString()
     {
         return "Offer{" +
                 "id=" + id +
                 ", PriceOffer=" + priceOffer +
+                ", currentPrice=" + currentPrice +
                 '}';
     }
 }

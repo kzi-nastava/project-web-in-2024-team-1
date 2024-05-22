@@ -1,9 +1,6 @@
 package com.webshop.controller;
 
-import com.webshop.dto.CreateCategoryDto;
-import com.webshop.dto.CreateProductDto;
-import com.webshop.dto.ProductDto;
-import com.webshop.dto.ProductFilterDto;
+import com.webshop.dto.*;
 import com.webshop.exception.AccountNotFoundException;
 import com.webshop.exception.CategoryNotFoundException;
 import com.webshop.exception.ProductNotFoundException;
@@ -149,5 +146,63 @@ public class ProductController
         }
     }
 
+
+    @PostMapping("purchase/{productId}")
+    public ResponseEntity<String> purchaseProduct(@PathVariable Long productId,@RequestBody PurchaseProductDto purchaseProductDto, HttpSession session){
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try{
+            productService.purchaseProduct(purchaseProductDto,account,productId);
+            return new ResponseEntity<>("Product purchased successfully", HttpStatus.OK);
+        } catch (AccountNotFoundException | ProductNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("purchased-products")
+    public ResponseEntity<List<PurchaseProductDto>> getPurchasedProducts(HttpSession session){
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<PurchaseProductDto> purchaseProductDtos = productService.getPurchaseProducts(account);
+        return ResponseEntity.ok(purchaseProductDtos);
+    }
+
+    @PostMapping("auction/{productId}")
+    public ResponseEntity<String> auctionProduct(@PathVariable Long productId,@RequestBody OfferDto offerDto, HttpSession session){
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try{
+            productService.auctionProduct(account,productId,offerDto);
+            return ResponseEntity.ok("Offer sent successfully");
+        } catch (AccountNotFoundException | ProductNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("purchase")
+    public ResponseEntity<List<PuchaseActionDto>> getPurchaseActions(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<PuchaseActionDto> purchaseActions = productService.getPurchaseActions(account);
+        return ResponseEntity.ok(purchaseActions);
+    }
+
+    @GetMapping("sale")
+    public ResponseEntity<List<PuchaseActionDto>> getSaleActions(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<PuchaseActionDto> saleActions = productService.getSaleActions(account);
+        return ResponseEntity.ok(saleActions);
+    }
 
 }
