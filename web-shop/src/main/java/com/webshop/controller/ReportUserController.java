@@ -1,6 +1,8 @@
 package com.webshop.controller;
 
 import com.webshop.dto.AccountDto;
+import com.webshop.dto.RejectReportDto;
+import com.webshop.dto.ReportActionDto;
 import com.webshop.model.Account;
 import com.webshop.dto.ReportUserDto;
 import com.webshop.service.ReportUserService;
@@ -45,16 +47,22 @@ public class ReportUserController {
     }
 
     @PostMapping("reject/{reportId}")
-    public ResponseEntity<String> rejectReport(@PathVariable Long reportId,@RequestParam String rejectReason,HttpSession session) {
+    public ResponseEntity<String> rejectReport(@PathVariable Long reportId, @RequestBody RejectReportDto rejectReportDto, HttpSession session) {
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
             return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
         }
         try{
-            reportUserService.rejectReport(reportId,rejectReason,account);
+            reportUserService.rejectReport(reportId,rejectReportDto,account);
             return ResponseEntity.ok("Report rejected");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("{userId}/actions")
+    public ResponseEntity<List<ReportActionDto>> getReportActions(@PathVariable Long userId) {
+        List<ReportActionDto> reportActionDtos = reportUserService.getUserReportActions(userId);
+        return ResponseEntity.ok(reportActionDtos);
     }
 }
