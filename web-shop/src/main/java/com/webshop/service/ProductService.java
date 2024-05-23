@@ -21,6 +21,7 @@ public class ProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Autowired
     private OfferRepository offerRepository;
 
@@ -319,7 +320,6 @@ public class ProductService {
                     offer.setAccount(currentAccount);
 
                     product.getOffers().add(offer);
-                    //offerRepository.save(offer);
                     productRepository.save(product);
 
                     offerDto.setCurrentPrice(currentPrice);
@@ -327,18 +327,54 @@ public class ProductService {
 
 
                 } else {
-                    //throw new InvalidBidException("Your bid must be higher than the current price");
-                    throw new ProductNotFoundException("Your bid must be higher than the current price");
+                    throw new InvalidBidException("Your bid must be higher than the current price");
                 }
             } else {
-                //throw new AuctionNotActiveException("The auction is not active");
-                throw new ProductNotFoundException("The auction is not active");
+                throw new AuctionNotActiveException("The auction is not active");
             }
 
         }
     }
 
+    public void endAuction(Long productId, Account currentAccount) {
 
+        if (!isSeller(currentAccount)) { throw new AccountRoleException("You do not have permission to end this auction"); }
+
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+
+        if (!isAuctionAvailable(product)) {
+            throw new AuctionNotActiveException("The auction is not active or the product is already sold");
+        }
+
+        List<Offer> offers = product.getOffers();
+        if (offers == null || offers.isEmpty()) {
+            throw new OfferNotFoundException("No offers found for this auction");
+        }
+
+        // Find the highest offer manually
+        Offer highestOffer = null;
+        double highestPrice = 0;
+        for (Offer offer : offers) {
+            if (offer.getPriceOffer() > highestPrice) {
+                highestOffer = offer;
+                highestPrice = offer.getPriceOffer();
+            }
+        }
+
+        if (highestOffer == null) {  throw new InvalidBidException("Failed to determine the highest offer"); }
+
+        // Update product as sold
+        product.setSold(true);
+        product.setProductType(ProductType.PURCHASED);
+        product.setBuyer(highestOffer.getAccount());
+        productRepository.save(product);
+
+        // Notify all participants and the seller
+       // notifyAuctionEnd(product, highestOffer);
+
+        // Move the product to the buyer's list of purchased items
+       // moveProductToBuyer(product, highestOffer.getAccount());
+    }
 
 
 

@@ -1,8 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.dto.*;
-import com.webshop.exception.AccountNotFoundException;
-import com.webshop.exception.ProductNotFoundException;
+import com.webshop.exception.*;
 import com.webshop.model.Account;
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
@@ -201,5 +200,25 @@ public class ProductController
         List<PuchaseActionDto> saleActions = productService.getSaleActions(account);
         return ResponseEntity.ok(saleActions);
     }
-
+    @PostMapping("/end-auction/{productId}")
+    public ResponseEntity<String> endAuction(@PathVariable Long productId, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            productService.endAuction(productId, account);
+            return ResponseEntity.ok("Auction ended successfully");
+        } catch (AccountRoleException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (ProductNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (AuctionNotActiveException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (OfferNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while ending the auction");
+        }
+    }
 }
