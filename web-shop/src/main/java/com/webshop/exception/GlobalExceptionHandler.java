@@ -76,6 +76,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SalesTypeException.class)
     public ResponseEntity<String> handleSalesTypeException(SalesTypeException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(OfferNotFoundException.class)
     public ResponseEntity<String> handleOfferNotFoundException(OfferNotFoundException ex) {
