@@ -1,10 +1,6 @@
 package com.webshop.dto;
 
-import com.webshop.model.Account;
 import com.webshop.model.Review;
-import jakarta.persistence.*;
-
-import java.util.Date;
 
 public class CreateReviewDto {
 

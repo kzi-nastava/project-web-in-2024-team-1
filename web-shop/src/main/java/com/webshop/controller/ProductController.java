@@ -1,20 +1,17 @@
 package com.webshop.controller;
 
 import com.webshop.dto.*;
-import com.webshop.exception.AccountNotFoundException;
-import com.webshop.exception.CategoryNotFoundException;
-import com.webshop.exception.ProductNotFoundException;
+import com.webshop.exception.*;
 import com.webshop.model.Account;
-import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
 import com.webshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,6 +200,49 @@ public class ProductController
         }
         List<PuchaseActionDto> saleActions = productService.getSaleActions(account);
         return ResponseEntity.ok(saleActions);
+    }
+    @PostMapping("/end-auction/{productId}")
+    public ResponseEntity<String> endAuction(@PathVariable Long productId, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            productService.endAuction(productId, account);
+            return ResponseEntity.ok("Auction ended successfully");
+        } catch (AccountRoleException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (ProductNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (AuctionNotActiveException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (OfferNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while ending the auction");
+        }
+    }
+
+    @PostMapping("/rate-buyer/{productId}")
+    public ResponseEntity<String> rateBuyerBySeller(@PathVariable Long productId, @RequestBody RatingDto ratingDto, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            productService.rateBuyerBySeller(account, productId, ratingDto);
+            return ResponseEntity.ok("Buyer rated successfully");
+        } catch (AccountRoleException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (ProductNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RatingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ProductIsSoldException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while rating the buyer");
+        }
     }
 
 }
