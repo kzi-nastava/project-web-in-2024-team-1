@@ -1,5 +1,6 @@
 package com.webshop.controller;
 
+import com.webshop.dto.PuchaseActionDto;
 import com.webshop.dto.RejectReportDto;
 import com.webshop.dto.ReportActionDto;
 import com.webshop.model.Account;
@@ -21,8 +22,12 @@ public class ReportUserController {
     private ReportUserService reportUserService;
 
     @PostMapping("add")
-    public ResponseEntity<ReportUserDto> addReport(@RequestBody ReportUserDto reportUserDto) {
-        ReportUserDto result = reportUserService.addReport(reportUserDto);
+    public ResponseEntity<ReportUserDto> addReport(@RequestBody ReportUserDto reportUserDto,HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        ReportUserDto result = reportUserService.addReport(reportUserDto,account);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
@@ -60,8 +65,14 @@ public class ReportUserController {
     }
 
     @GetMapping("{userId}/actions")
-    public ResponseEntity<List<ReportActionDto>> getReportActions(@PathVariable Long userId) {
-        List<ReportActionDto> reportActionDtos = reportUserService.getUserReportActions(userId);
+    public ResponseEntity<List<ReportActionDto>> getReportActions(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<ReportActionDto> reportActionDtos = reportUserService.getUserReportActions(account);
         return ResponseEntity.ok(reportActionDtos);
     }
+
+
 }

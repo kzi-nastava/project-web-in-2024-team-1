@@ -1,6 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.dto.CategoryDto;
+import com.webshop.dto.CategoryNameDto;
 import com.webshop.dto.CreateCategoryDto;
 import com.webshop.exception.AccountNotFoundException;
 import com.webshop.exception.CategoryNotFoundException;
@@ -24,7 +25,7 @@ public class CategoryController
     private CategoryService categoryService;
 
     @GetMapping("all")
-    public List<CategoryDto> getAllCategorys(){return categoryService.getAllCategorys();}
+    public List<CategoryNameDto> getAllCategorys(){return categoryService.getAllCategorys();}
 
     @GetMapping("getByName")
     public ResponseEntity<?> searchCategoryByName(@RequestParam String categoryName) {

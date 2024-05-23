@@ -9,7 +9,7 @@ public class PurchaseProductDto {
     private Double price;
     private String imagePath;
     private Boolean isSold=true;
-    private List<PurchaseProductDto> purchaseProducts;
+    //private List<PurchaseProductDto> purchaseProducts;
 
 
     public PurchaseProductDto() { }
@@ -60,13 +60,13 @@ public class PurchaseProductDto {
         isSold = sold;
     }
 
-    public List<PurchaseProductDto> getPurchaseProducts() {
+    /*public List<PurchaseProductDto> getPurchaseProducts() {
         return purchaseProducts;
     }
 
     public void setPurchaseProducts(List<PurchaseProductDto> purchaseProducts) {
 
         this.purchaseProducts = purchaseProducts;
-    }
+    }*/
 
 }
