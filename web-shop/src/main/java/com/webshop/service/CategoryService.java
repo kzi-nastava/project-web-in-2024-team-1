@@ -2,7 +2,6 @@ package com.webshop.service;
 
 import com.webshop.dto.CategoryDto;
 import com.webshop.dto.CreateCategoryDto;
-import com.webshop.dto.CreateProductDto;
 import com.webshop.dto.ProductDto;
 import com.webshop.exception.AccountRoleException;
 import com.webshop.exception.CategoryAlreadyExistsException;

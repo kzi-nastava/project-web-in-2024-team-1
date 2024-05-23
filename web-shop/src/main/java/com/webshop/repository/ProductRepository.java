@@ -2,12 +2,10 @@ package com.webshop.repository;
 
 
 import com.webshop.model.Account;
-import com.webshop.model.Category;
 
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -23,11 +21,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     List<Product> findBySeller(Account seller);
 
 
-//    @Query("SELECT p FROM Product p WHERE " +
-//            "(:categoryName IS NULL OR p.category.categoryName = :categoryName) AND " +
-//            "(:startPrice IS NULL OR p.price >= :startPrice) AND " +
-//            "(:endPrice IS NULL OR p.price <= :endPrice) AND " +
-//            "(:salesType IS NULL OR p.salesType = :salesType)")
     List<Product> findAllByCategory_CategoryNameAndPriceBetweenAndSalesType(
             String categoryName,
             Double startPrice,

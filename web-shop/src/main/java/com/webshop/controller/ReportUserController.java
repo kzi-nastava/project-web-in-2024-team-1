@@ -1,6 +1,5 @@
 package com.webshop.controller;
 
-import com.webshop.dto.AccountDto;
 import com.webshop.dto.RejectReportDto;
 import com.webshop.dto.ReportActionDto;
 import com.webshop.model.Account;

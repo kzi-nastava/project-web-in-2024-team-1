@@ -1,7 +1,6 @@
 package com.webshop.service;
 
 import com.webshop.dto.OfferDto;
-import com.webshop.dto.ReportActionDto;
 import com.webshop.exception.AccountRoleException;
 import com.webshop.exception.OfferNotFoundException;
 import com.webshop.model.*;
