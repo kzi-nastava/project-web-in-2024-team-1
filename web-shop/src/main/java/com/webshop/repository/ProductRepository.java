@@ -1,5 +1,9 @@
 package com.webshop.repository;
 
+
+import com.webshop.model.Account;
+import com.webshop.model.Category;
+
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +16,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 {
     List<Product> findByName(String name);
     List<Product> findByDescription(String description);
+
     List<Product> findByCategory_CategoryName(String categoryName);
+
+    List<Product> findByBuyer(Account buyer);
+    List<Product> findBySeller(Account seller);
+
 
 //    @Query("SELECT p FROM Product p WHERE " +
 //            "(:categoryName IS NULL OR p.category.categoryName = :categoryName) AND " +

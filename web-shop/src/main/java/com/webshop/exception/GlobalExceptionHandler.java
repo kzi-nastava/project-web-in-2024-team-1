@@ -57,6 +57,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
+
     @ExceptionHandler(InvalidBidException.class)
     public ResponseEntity<String> handleInvalidBidException(InvalidBidException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -75,5 +76,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SalesTypeException.class)
     public ResponseEntity<String> handleSalesTypeException(SalesTypeException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+
+    @ExceptionHandler(OfferNotFoundException.class)
+    public ResponseEntity<String> handleOfferNotFoundException(OfferNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+
     }
 }

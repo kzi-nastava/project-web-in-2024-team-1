@@ -4,11 +4,11 @@ VALUES
     ('Maja','Majic','maja123','Maja.Majic@gmail.com','0624536780','maja111','2002-02-10','datoteka.jpg','bio','CUSTOMER',5.0),
     ('Jovan','Jovic','jovan123','Jovan.Jovic@gmail.com','0654536780','jovan111','1999-02-10','datoteka.jpg','bio','ADMINISTRATOR',9.6);
 
-INSERT INTO OFFER (price_offer, customer_offer_id)
+INSERT INTO OFFER (price_offer,current_price, customer_offer_id)
 VALUES
-    (20.00, 1),
-    (40.00, 2),
-    (30.00, 3);
+    (20.00,20.00, 1),
+    (40.00,40.00, 2),
+    (30.00,30.00, 3);
 
 INSERT INTO CATEGORY(category_name)
 VALUES
@@ -17,11 +17,11 @@ VALUES
     ('treca kategorija');
 
 
-INSERT INTO PRODUCT (name, description, image_path, price, sales_type, release_date, category_id, customer_review, seller_review, is_sold, product_type)
+INSERT INTO PRODUCT (name, description, image_path, price, sales_type, release_date, category_id, customer_review, seller_review, is_sold, product_type,buyer_id,seller_id)
 VALUES
-    ('Product1', 'Description for Product1', 'slika1.jpg', 100.0, 'FIXED_PRICE', '2024-01-01', 1, TRUE, FALSE, FALSE, 'FOR_SALE'),
-    ('Product2', 'Description for Product2', 'slika2.jpg', 200.0, 'AUCTION', '2024-02-01', 2, FALSE, TRUE, TRUE, 'PURCHASED'),
-    ('Product3', 'Description for Product3', 'slika3.jpg', 150.0, 'FIXED_PRICE', '2024-03-01', 3, TRUE, TRUE, FALSE, 'FOR_SALE');
+    ('Product1', 'Description for Product1', 'slika1.jpg', 100.0, 'FIXED_PRICE', '2024-01-01', 1, TRUE, FALSE, FALSE, 'FOR_SALE',null,1),
+    ('Product2', 'Description for Product2', 'slika2.jpg', 200.0, 'AUCTION', '2024-02-01', 2, FALSE, TRUE, FALSE, 'FOR_SALE',null,1),
+    ('Product3', 'Description for Product3', 'slika3.jpg', 150.0, 'FIXED_PRICE', '2024-03-01', 3, TRUE, TRUE, FALSE, 'FOR_SALE',null,1);
 
 INSERT INTO PRODUCT_OFFERS (product_id, offer_id)
 VALUES
