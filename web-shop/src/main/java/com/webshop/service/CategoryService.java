@@ -1,6 +1,7 @@
 package com.webshop.service;
 
 import com.webshop.dto.CategoryDto;
+import com.webshop.dto.CategoryNameDto;
 import com.webshop.dto.CreateCategoryDto;
 import com.webshop.dto.ProductDto;
 import com.webshop.exception.AccountRoleException;
@@ -34,17 +35,22 @@ public class CategoryService
     public Optional<Category> findByCategoryName(String categoryName) { return categoryRepository.findByCategoryName(categoryName); }
     public Category findOne(Long id){return categoryRepository.findById(id).orElse(null);}
 
-    public List<CategoryDto>getAllCategorys(){
+    public List<CategoryNameDto>getAllCategorys(){
         List<Category>categoryList = categoryRepository.findAll();
         List<CategoryDto>categoryDtoList = new ArrayList<CategoryDto>();
+        List<CategoryNameDto> categoryNameDtoList = new ArrayList<>();
 
         for(Category category : categoryList){
             CategoryDto categoryDto = new CategoryDto();
-            categoryDto.setId(category.getId());
+            //categoryDto.setId(category.getId());
             categoryDto.setCategoryName(category.getCategoryName());
-            categoryDtoList.add(categoryDto);
+
+            CategoryNameDto categoryNameDto = new CategoryNameDto();
+            categoryNameDto.setCategoryName(categoryDto.getCategoryName());
+            categoryNameDtoList.add(categoryNameDto);
+
         }
-        return categoryDtoList;
+        return categoryNameDtoList;
     }
 
     public void createCategory(CreateCategoryDto createCategoryDto, Account currentAccount){

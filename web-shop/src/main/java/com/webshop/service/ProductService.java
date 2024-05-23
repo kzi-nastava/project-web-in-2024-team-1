@@ -215,6 +215,7 @@ public class ProductService {
         product.setReleaseDate(new Date());
         product.setSold(false);
         product.setProductType(ProductType.FOR_SALE);
+        product.setSeller(currentAccount);
         productRepository.save(product);
     }
 
@@ -238,11 +239,11 @@ public class ProductService {
                 purchaseProductDto.setImagePath(product.getImagePath());
                 purchaseProductDto.setSold(true);
 
-                if (purchaseProductDto.getPurchaseProducts() == null) {
+                /*if (purchaseProductDto.getPurchaseProducts() == null) {
                     purchaseProductDto.setPurchaseProducts(new ArrayList<>());
                 }
                 purchaseProductDto.getPurchaseProducts().add(new PurchaseProductDto(product.getName(), product.getPrice(), product.getImagePath(), product.getSold()));
-
+*/
             } else {
                 throw new ProductNotFoundException("Product already purchased");
             }
@@ -276,7 +277,7 @@ public class ProductService {
             PuchaseActionDto purchaseActionDto = new PuchaseActionDto();
             purchaseActionDto.setId(product.getId());
 
-            if(product.getProductType() == ProductType.PURCHASED && product.getBuyer().equals(currentAccount)) {
+            if(product.getProductType() == ProductType.PURCHASED ) {
                 purchaseActionDto.setMessage("You have purchased a product");
             }
             purchaseActionDtos.add(purchaseActionDto);
@@ -298,6 +299,8 @@ public class ProductService {
 
             if (product.getProductType() == ProductType.PURCHASED) {
                 saleActionDto.setMessage("You have sold a product");
+            } else if(product.getProductType() == ProductType.FOR_SALE){
+                saleActionDto.setMessage("Product not sold");
             }
             saleActionDtos.add(saleActionDto);
         }
@@ -319,14 +322,15 @@ public class ProductService {
                 if ( offerDto.getPriceOffer() > currentPrice) {
                     Offer offer = new Offer();
                     offer.setPriceOffer(offerDto.getPriceOffer());
-                    offer.setCurrentPrice(currentPrice);
+                    offer.setCurrentPrice(offer.getPriceOffer());
 
                     offer.setAccount(currentAccount);
 
                     product.getOffers().add(offer);
+                    product.setPrice(offerDto.getPriceOffer());
                     productRepository.save(product);
 
-                    offerDto.setCurrentPrice(currentPrice);
+                    offerDto.setCurrentPrice(offer.getCurrentPrice());
                     offerDto.setPriceOffer(offerDto.getPriceOffer());
 
 
@@ -371,6 +375,7 @@ public class ProductService {
         product.setSold(true);
         product.setProductType(ProductType.PURCHASED);
         product.setBuyer(highestOffer.getAccount());
+        product.setPrice(highestOffer.getPriceOffer());
         productRepository.save(product);
 
         // Notify all participants and the seller

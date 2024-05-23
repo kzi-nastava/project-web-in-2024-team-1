@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReportUserRepository extends JpaRepository<ReportUser, Long> {
-    List<ReportUser> findByReportingUser_Id(Long userId);
+    List<ReportUser> findByReportedUser_Id(Long userId);
 }

@@ -28,16 +28,18 @@ public class ReportUserService {
     private ProductService productService;
 
 
-    public ReportUserDto addReport(ReportUserDto reportUserDto) {
+    public ReportUserDto addReport(ReportUserDto reportUserDto,Account currentAccount) {
+
         try {
             ReportUser reportUser = new ReportUser();
             reportUser.setReason(reportUserDto.getReason());
             reportUser.setReportDate(new Date());
+            Account reportedAccount = currentAccount;
             Account reportingAccount = accountRepository.findById(reportUserDto.getReportingUserId()).orElseThrow(() -> new RuntimeException("Reporting user not found"));
-            Account reportedAccount = accountRepository.findById(reportUserDto.getReportedUserId()).orElseThrow(() -> new RuntimeException("Reported user not found"));
-            /*reportUser.setReportingUser(reportUser.getReportingUser());
-            reportUser.setReportedUser(reportUser.getReportedUser());
-            reportUser.setStatus(ReportStatus.valueOf(reportUserDto.getStatus()));*/
+            //Account reportedAccount = accountRepository.findById(reportUserDto.getReportedUserId()).orElseThrow(() -> new RuntimeException("Reported user not found"));
+            if(reportingAccount == reportedAccount){
+                throw new AccountRoleException("Reported user and reporting user cannot be the same");
+            }
             reportUser.setReportingUser(reportingAccount);
             reportUser.setReportedUser(reportedAccount);
             reportUser.setStatus(ReportStatus.valueOf(reportUserDto.getStatus()));
@@ -77,7 +79,7 @@ public class ReportUserService {
         reportUser.setStatus(ReportStatus.ACCEPTED);
         reportUserRepository.save(reportUser);
 
-        Account reportedUser = reportUser.getReportedUser();
+        Account reportedUser = reportUser.getReportingUser();
         reportedUser.setBlocked(true);
         accountRepository.save(reportedUser);
         //reportUser.getReportedUser().setBlocked(true);
@@ -98,8 +100,9 @@ public class ReportUserService {
         return account != null && account.getUserRole() == Role.ADMINISTRATOR;
     }
 
-    public List<ReportActionDto> getUserReportActions(Long userId){
-        List<ReportUser> userReports = reportUserRepository.findByReportingUser_Id(userId);
+    public List<ReportActionDto> getUserReportActions(Account currentAccount){
+
+        List<ReportUser> userReports = reportUserRepository.findByReportedUser_Id(currentAccount.getId());
         List<ReportActionDto> reportActionDtos = new ArrayList<>();
 
         for (ReportUser reportUser : userReports) {
