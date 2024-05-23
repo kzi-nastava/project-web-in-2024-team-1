@@ -2,16 +2,13 @@ package com.webshop.controller;
 
 import com.webshop.dto.*;
 import com.webshop.exception.AccountNotFoundException;
-import com.webshop.exception.CategoryNotFoundException;
 import com.webshop.exception.ProductNotFoundException;
 import com.webshop.model.Account;
-import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
 import com.webshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

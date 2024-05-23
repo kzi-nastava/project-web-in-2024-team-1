@@ -1,10 +1,7 @@
 package com.webshop.dto;
 
-import com.webshop.model.Category;
 import com.webshop.model.Product;
 import com.webshop.model.SalesType;
-
-import java.time.LocalDate;
 
 public class ProductDto
 {

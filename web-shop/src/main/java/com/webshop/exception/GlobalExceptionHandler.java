@@ -9,7 +9,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<String> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        //return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(GmailAlreadyExistsException.class)
@@ -29,7 +28,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
-        //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
@@ -76,6 +74,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SalesTypeException.class)
     public ResponseEntity<String> handleSalesTypeException(SalesTypeException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(OfferNotFoundException.class)
     public ResponseEntity<String> handleOfferNotFoundException(OfferNotFoundException ex) {
