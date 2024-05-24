@@ -1,6 +1,5 @@
 package com.webshop.model;
 
-import com.webshop.dto.RatingDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;

@@ -223,26 +223,24 @@ public class ProductController
         }
     }
 
-    /*@PostMapping("/rate-buyer/{productId}")
-    public ResponseEntity<String> rateBuyerBySeller(@PathVariable Long productId, @RequestBody RatingDto ratingDto, HttpSession session) {
+    @GetMapping("endAuction-seller")
+    public ResponseEntity<List<EndAuctionDto>> getEndAuctionBySeller(HttpSession session) {
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
-            return new ResponseEntity<>("Not logged in", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        try {
-            productService.rateBuyerBySeller(account, productId, ratingDto);
-            return ResponseEntity.ok("Buyer rated successfully");
-        } catch (AccountRoleException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        } catch (ProductNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RatingException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (ProductIsSoldException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        List<EndAuctionDto> purchaseActions = productService.getEndAuctionForSeller(account);
+        return ResponseEntity.ok(purchaseActions);
+    }
+
+    @GetMapping("endAuction-buyer")
+    public ResponseEntity<List<EndAuctionDto>> getEndAuctionByBuyer(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-    }*/
+        List<EndAuctionDto> purchaseActions = productService.getEndAuctionForCustomer(account);
+        return ResponseEntity.ok(purchaseActions);
+    }
 
 }
