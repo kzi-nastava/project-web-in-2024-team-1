@@ -34,12 +34,12 @@ public class ReviewService {
         }
 
         if(reviewer.getUserRole() == Role.CUSTOMER && reviewedUser.getUserRole() == Role.SELLER){
-            createAndSaveReview(createReviewDto, reviewedUser, reviewer);
+            createAndSaveReview(createReviewDto, reviewer, reviewedUser);
             double averageRating = getAverageRatingByReviewerId(reviewedUser);
             reviewedUser.setAverageRating(averageRating);
             accountRepository.save(reviewedUser);
         } else if(reviewer.getUserRole() == Role.SELLER && reviewedUser.getUserRole() == Role.CUSTOMER){
-            createAndSaveReview(createReviewDto, reviewedUser, reviewer);
+            createAndSaveReview(createReviewDto, reviewer, reviewedUser);
             double averageRating = getAverageRatingByReviewerId(reviewedUser);
             reviewedUser.setAverageRating(averageRating);
             accountRepository.save(reviewedUser);
