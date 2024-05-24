@@ -385,46 +385,6 @@ public class ProductService {
        // moveProductToBuyer(product, highestOffer.getAccount());
     }
 
-    public void rateBuyerBySeller(Account currentAccount, Long productId,RatingDto ratingDto){
 
-        if (!isSeller(currentAccount)) { throw new AccountRoleException("You do not have permission to rate this buyer"); }
-
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
-
-        if (!currentAccount.getId().equals(product.getBuyer().getId())) {throw new RatingException("You can only rate the buyer who purchased your product"); }
-
-        if (!product.getSold()) { throw new ProductIsSoldException("Product must be sold to rate the buyer"); }
-
-        int mark = ratingDto.getMark();
-        String comment = ratingDto.getComment();
-        if (mark < 1 || mark > 5) { throw new RatingException("Rating mark must be between 1 and 5"); }
-
-        Account buyer= product.getBuyer();
-        double oldRating = buyer.getAverageRating();
-        int totalRatings = getTotalRatings(buyer);
-        double newRating = ((oldRating * totalRatings + mark) / (totalRatings + 1));
-
-        buyer.setAverageRating(newRating);
-
-        accountRepository.save(buyer);
-    }
-
-    private int getTotalRatings(Account buyer) {
-        int totalRatings = 0;
-
-
-        List<Product> purchasedProducts = productRepository.findByBuyer(buyer);
-
-
-        for (Product product : purchasedProducts) {
-
-            if (product.getSeller() != null && product.getSold()) {
-
-                totalRatings++;
-            }
-        }
-
-        return totalRatings;
-    }
 }
 

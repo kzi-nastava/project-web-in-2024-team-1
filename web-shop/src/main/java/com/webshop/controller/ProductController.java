@@ -223,7 +223,7 @@ public class ProductController
         }
     }
 
-    @PostMapping("/rate-buyer/{productId}")
+    /*@PostMapping("/rate-buyer/{productId}")
     public ResponseEntity<String> rateBuyerBySeller(@PathVariable Long productId, @RequestBody RatingDto ratingDto, HttpSession session) {
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
@@ -241,8 +241,8 @@ public class ProductController
         } catch (ProductIsSoldException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while rating the buyer");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-    }
+    }*/
 
 }
