@@ -35,8 +35,14 @@ public class ReviewService {
 
         if(reviewer.getUserRole() == Role.CUSTOMER && reviewedUser.getUserRole() == Role.SELLER){
             createAndSaveReview(createReviewDto, reviewedUser, reviewer);
+            double averageRating = getAverageRatingByReviewerId(reviewedUser);
+            reviewedUser.setAverageRating(averageRating);
+            accountRepository.save(reviewedUser);
         } else if(reviewer.getUserRole() == Role.SELLER && reviewedUser.getUserRole() == Role.CUSTOMER){
             createAndSaveReview(createReviewDto, reviewedUser, reviewer);
+            double averageRating = getAverageRatingByReviewerId(reviewedUser);
+            reviewedUser.setAverageRating(averageRating);
+            accountRepository.save(reviewedUser);
         } else {
             throw new ReviewAndReviewedException("Invalid review roles. Customers can only review sellers and vice versa.");
         }
@@ -47,12 +53,30 @@ public class ReviewService {
     private void createAndSaveReview(CreateReviewDto createReviewDto, Account reviewer, Account reviewedUser){
         Review review = new Review();
         review.setRating(createReviewDto.getRating());
+        if(review.getRating() < 1 || review.getRating() > 5 ){
+            throw new ReviewAndReviewedException("Invalid rating");
+        }
         review.setComment(createReviewDto.getComment());
         review.setReviewDate(new Date());
         review.setReviewer(reviewer);
         review.setReviewedUser(reviewedUser);
 
         reviewRepository.save(review);
+
+
+    }
+
+    public Double getAverageRatingByReviewerId(Account reviewedUserId){
+        List<Review> reviews = reviewRepository.findByReviewedUserId(reviewedUserId.getId());
+        if(reviews.isEmpty()){
+            return 0.0;
+        }
+
+        double sum = 0;
+        for(Review review : reviews){
+            sum += review.getRating();
+        }
+        return sum / reviews.size();
     }
 
     public List<Review> getReviewsFromReviewees(Long accountId){
