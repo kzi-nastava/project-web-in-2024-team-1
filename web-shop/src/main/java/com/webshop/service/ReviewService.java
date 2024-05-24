@@ -5,9 +5,11 @@ import com.webshop.exception.AccountNotFoundException;
 import com.webshop.exception.AccountRoleException;
 import com.webshop.exception.ReviewAndReviewedException;
 import com.webshop.model.Account;
+import com.webshop.model.Product;
 import com.webshop.model.Review;
 import com.webshop.model.Role;
 import com.webshop.repository.AccountRepository;
+import com.webshop.repository.ProductRepository;
 import com.webshop.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class ReviewService {
 
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     public void createReview(Long reviewerId, CreateReviewDto createReviewDto,Long reviewedUserId){
         Account reviewer = accountRepository.findById(reviewerId).orElseThrow(() -> new AccountNotFoundException("Reviewer not found"));
@@ -33,7 +37,7 @@ public class ReviewService {
             throw new ReviewAndReviewedException("Reviewer and reviewed user cannot be the same");
         }
 
-        if(reviewer.getUserRole() == Role.CUSTOMER && reviewedUser.getUserRole() == Role.SELLER){
+        if(reviewer.getUserRole() == Role.CUSTOMER  && reviewedUser.getUserRole() == Role.SELLER ){
             createAndSaveReview(createReviewDto, reviewer, reviewedUser);
             double averageRating = getAverageRatingByReviewerId(reviewedUser);
             reviewedUser.setAverageRating(averageRating);
