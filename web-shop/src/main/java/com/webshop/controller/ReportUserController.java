@@ -74,5 +74,15 @@ public class ReportUserController {
         return ResponseEntity.ok(reportActionDtos);
     }
 
+    @GetMapping("{userId}/acceptAction")
+    public ResponseEntity<List<ReportActionDto>> getUserReports(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<ReportActionDto> reportActionDtos = reportUserService.getUserReports(account);
+        return ResponseEntity.ok(reportActionDtos);
+    }
+
 
 }

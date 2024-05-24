@@ -19,7 +19,7 @@ VALUES
 
 INSERT INTO PRODUCT (name, description, image_path, price, sales_type, release_date, category_id, customer_review, seller_review, is_sold, product_type,buyer_id,seller_id)
 VALUES
-    ('Product1', 'Description for Product1', 'slika1.jpg', 100.0, 'FIXED_PRICE', '2024-01-01', 1, TRUE, FALSE, FALSE, 'FOR_SALE',null,1),
+    ('Product1', 'Description for Product1', 'slika1.jpg', 100.0, 'FIXED_PRICE', '2024-01-01', 1, TRUE, TRUE, FALSE, 'FOR_SALE',null,1),
     ('Product2', 'Description for Product2', 'slika2.jpg', 200.0, 'AUCTION', '2024-02-01', 2, FALSE, TRUE, FALSE, 'FOR_SALE',null,1),
     ('Product3', 'Description for Product3', 'slika3.jpg', 150.0, 'FIXED_PRICE', '2024-03-01', 3, TRUE, TRUE, FALSE, 'FOR_SALE',null,1);
 
