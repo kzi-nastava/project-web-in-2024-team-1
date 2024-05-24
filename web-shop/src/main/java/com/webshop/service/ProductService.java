@@ -239,11 +239,7 @@ public class ProductService {
                 purchaseProductDto.setImagePath(product.getImagePath());
                 purchaseProductDto.setSold(true);
 
-                /*if (purchaseProductDto.getPurchaseProducts() == null) {
-                    purchaseProductDto.setPurchaseProducts(new ArrayList<>());
-                }
-                purchaseProductDto.getPurchaseProducts().add(new PurchaseProductDto(product.getName(), product.getPrice(), product.getImagePath(), product.getSold()));
-*/
+              
             } else {
                 throw new ProductNotFoundException("Product already purchased");
             }
@@ -377,11 +373,7 @@ public class ProductService {
         product.setBuyer(highestOffer.getAccount());
         product.setPrice(highestOffer.getPriceOffer());
         productRepository.save(product);
-        // Notify all participants and the seller
-       // notifyAuctionEnd(product, highestOffer);
 
-        // Move the product to the buyer's list of purchased items
-       // moveProductToBuyer(product, highestOffer.getAccount());
     }
 
     public List<EndAuctionDto> getEndAuctionForSeller(Account account){
