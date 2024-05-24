@@ -1,5 +1,6 @@
 package com.webshop.model;
 
+import com.webshop.dto.RatingDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -71,6 +72,7 @@ public class Account implements Serializable {
 
     @Column
     private double averageRating;
+
 
     public Account() {
 
@@ -237,6 +239,8 @@ public class Account implements Serializable {
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
     }
+
+
 
     @Override
     public String toString() {
