@@ -1,20 +1,16 @@
 package com.webshop.service;
 
 import com.webshop.dto.*;
-import com.webshop.exception.UsernameAlreadyExistsException;
-import com.webshop.exception.GmailAlreadyExistsException;
-import com.webshop.exception.AccountRoleException;
-import com.webshop.exception.PasswordNotCorrectException;
-import com.webshop.exception.AuthenticationException;
-import com.webshop.exception.AccountNotFoundException;
-import com.webshop.model.Account;
-import com.webshop.model.Role;
+import com.webshop.exception.*;
+import com.webshop.model.*;
 import com.webshop.repository.AccountRepository;
+import com.webshop.repository.ProductRepository;
 import com.webshop.repository.ReviewRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +20,12 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private ReviewService reviewService;
 
     public Account findOne(Long id){
         Optional<Account> account = accountRepository.findById(id);
@@ -32,6 +34,53 @@ public class AccountService {
         }
         return null;
     }
+
+    public ViewAccountDto findOneDto(Long id){
+        Account account = accountRepository.findById(id).orElse(null);
+        if(account == null){
+
+            return null;
+
+        }
+        ViewAccountDto viewAccountDto = new ViewAccountDto(account);
+
+        if(account.getUserRole() == Role.SELLER){
+            List<Product> products= productRepository.findProductsBySeller(account);
+            List<ProductDto> productDtos = new ArrayList<>();
+            for (Product product : products) {
+                productDtos.add(new ProductDto(product));
+            }
+            viewAccountDto.setProducts(productDtos);
+
+            List<Review> reviews = reviewService.getReviewsByReviewer(account.getId());
+            List<ReviewDto> reviewDtos = new ArrayList<>();
+            for (Review review : reviews) {
+                reviewDtos.add(new ReviewDto(review));
+            }
+            viewAccountDto.setReceivedReviews(reviewDtos);
+        } else if(account.getUserRole() == Role.CUSTOMER){
+            List<Product> products1 = productRepository.findProductsByBuyer(account);
+            List<ProductDto> productDtos = new ArrayList<>();
+            for (Product product : products1) {
+                productDtos.add(new ProductDto(product));
+            }
+            viewAccountDto.setProducts(productDtos);
+
+            List<Review> reviews = reviewService.getReviewsByReviewer(account.getId());
+            List<ReviewDto> reviewDtos = new ArrayList<>();
+            for (Review review : reviews) {
+                reviewDtos.add(new ReviewDto(review));
+            }
+            viewAccountDto.setReceivedReviews(reviewDtos);
+        } else{
+            throw new AccountRoleException("Account role not supported");
+        }
+
+        return viewAccountDto;
+
+    }
+
+
 
     public Account save(Account account){
         return accountRepository.save(account);

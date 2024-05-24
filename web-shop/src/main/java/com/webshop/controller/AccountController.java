@@ -24,13 +24,24 @@ public class AccountController {
     }
 
     @GetMapping("account/{id}")
-    public ResponseEntity<Account> getAccount(@PathVariable("id") Long id) {
+    public ResponseEntity<AccountDto> getAccount(@PathVariable("id") Long id) {
         Account account = accountService.findOne(id);
         if(account == null) {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
         AccountDto accountDto = new AccountDto(account);
-        return ResponseEntity.ok(account);
+        return ResponseEntity.ok(accountDto);
+    }
+
+    @GetMapping("viewAccount/{id}")
+    public ResponseEntity<ViewAccountDto> getAccountView(@PathVariable("id") Long id) {
+        ViewAccountDto viewAccountDto = accountService.findOneDto(id);
+        if(viewAccountDto == null) {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+
+        //ViewAccountDto accountDto = new ViewAccountDto(account);
+        return ResponseEntity.ok(viewAccountDto);
     }
 
     @GetMapping("accounts")

@@ -19,6 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 
     List<Product> findByBuyer(Account buyer);
     List<Product> findBySeller(Account seller);
+    List<Product> findProductsBySeller(Account seller);
+    List<Product> findProductsByBuyer(Account buyer);
 
 
     List<Product> findAllByCategory_CategoryNameAndPriceBetweenAndSalesType(
