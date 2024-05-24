@@ -4,11 +4,10 @@ import com.webshop.dto.RejectReportDto;
 import com.webshop.dto.ReportActionDto;
 import com.webshop.dto.ReportUserDto;
 import com.webshop.exception.AccountRoleException;
-import com.webshop.model.Account;
-import com.webshop.model.ReportStatus;
-import com.webshop.model.ReportUser;
-import com.webshop.model.Role;
+import com.webshop.exception.ProductNotFoundException;
+import com.webshop.model.*;
 import com.webshop.repository.AccountRepository;
+import com.webshop.repository.ProductRepository;
 import com.webshop.repository.ReportUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReportUserService {
@@ -26,6 +26,8 @@ public class ReportUserService {
     private AccountRepository accountRepository;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
 
 
     public ReportUserDto addReport(ReportUserDto reportUserDto,Account currentAccount) {
@@ -81,8 +83,18 @@ public class ReportUserService {
 
         Account reportedUser = reportUser.getReportingUser();
         reportedUser.setBlocked(true);
+
+        deleteProduct(reportedUser);
+
         accountRepository.save(reportedUser);
-        //reportUser.getReportedUser().setBlocked(true);
+
+    }
+
+    public void deleteProduct(Account account){
+        List<Product> productOptional = new ArrayList<>(productRepository.findBySeller(account)) ;
+        account.getProductList().removeAll(productOptional);
+        accountRepository.save(account);
+        productRepository.deleteAll(productOptional);
 
     }
 
@@ -114,6 +126,21 @@ public class ReportUserService {
             } else if (reportUser.getStatus() == ReportStatus.REJECTED){
                 String message = "Your report has been rejected: " + reportUser.getReason();
                 actionDto.setMessage(message);
+            }
+            reportActionDtos.add(actionDto);
+        }
+
+        return reportActionDtos;
+    }
+
+    public List<ReportActionDto> getUserReports(Account currentAccount){
+        List<ReportUser> userReports = reportUserRepository.findByReportingUser_Id(currentAccount.getId());
+        List<ReportActionDto> reportActionDtos = new ArrayList<>();
+        for(ReportUser reportUser : userReports){
+            ReportActionDto actionDto  = new ReportActionDto();
+            actionDto.setReportId(reportUser.getId());
+            if(reportUser.getStatus() == ReportStatus.ACCEPTED){
+                actionDto.setMessage("Your have been blocked and all your products for sale have been deleted");
             }
             reportActionDtos.add(actionDto);
         }
