@@ -377,7 +377,6 @@ public class ProductService {
         product.setBuyer(highestOffer.getAccount());
         product.setPrice(highestOffer.getPriceOffer());
         productRepository.save(product);
-
         // Notify all participants and the seller
        // notifyAuctionEnd(product, highestOffer);
 
@@ -385,6 +384,37 @@ public class ProductService {
        // moveProductToBuyer(product, highestOffer.getAccount());
     }
 
-
+    public List<EndAuctionDto> getEndAuctionForSeller(Account account){
+        if(!isSeller(account)){
+            throw new AccountRoleException("You don't have premision");
+        }
+        List<Product> products = productRepository.findBySeller(account);
+        List<EndAuctionDto> endAuctionDtos = new ArrayList<>();
+        for (Product product : products) {
+            EndAuctionDto endAuctionDto = new EndAuctionDto();
+            endAuctionDto.setId(product.getId());
+            if(product.getProductType() == ProductType.PURCHASED){
+                endAuctionDto.setMsg("Aukcija je zavrsena, konačan kupac je:   "+product.getBuyer().getId());
+            }
+            endAuctionDtos.add(endAuctionDto);
+        }
+        return endAuctionDtos;
+    }
+    public List<EndAuctionDto> getEndAuctionForCustomer(Account account){
+        if(!isCustomer(account)){
+            throw new AccountRoleException("You don't have premision");
+        }
+        List<Product> products = productRepository.findByBuyer(account);
+        List<EndAuctionDto> endAuctionDtos = new ArrayList<>();
+        for (Product product : products) {
+            EndAuctionDto endAuctionDto = new EndAuctionDto();
+            endAuctionDto.setId(product.getId());
+            if(product.getProductType() == ProductType.PURCHASED){
+                endAuctionDto.setMsg("Aukcija je zavrsena, konačan kupac je:  "+product.getBuyer().getId());
+            }
+            endAuctionDtos.add(endAuctionDto);
+        }
+        return endAuctionDtos;
+    }
 }
 
