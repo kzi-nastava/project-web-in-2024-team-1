@@ -24,30 +24,39 @@
           <div class="product-card" v-for="product in displayedProducts" :key="product.id">
             <h2>{{ product.name }}</h2>
             <img v-if="product.imagePath" :src="getProductImage(product.imagePath)" alt="Product Image" />
-            <p>Price: {{ product.price }}</p>
-            <p>Description: {{ product.description }}</p>
-            <button class="btn btn-outline-dark" type="button" @click.prevent="loadProduct(product)">Details</button>
-            <button
-              v-if="product.salesType === 'AUCTION'"
-              class="btn btn-outline-dark"
-              type="button"
-              @click.prevent="openAuctionPopup(product)"
-              :disabled="bidPlacedProducts.includes(product.id)"
-            >
-              {{ bidPlacedProducts.includes(product.id) ? 'Bid Placed' : 'Place Bid' }}
-            </button>
-            <button
-              v-else
-              class="btn btn-outline-dark"
-              type="button"
-              @click.prevent="purchaseProduct(product.id)"
-              :disabled="purchasedProducts.includes(product.id)"
-            >
-              {{ purchasedProducts.includes(product.id) ? 'Purchased' : 'Purchase' }}
-            </button>
+            <div class="product-info">
+              <p>Description:<br> {{ product.description }}</p>
+              <p class="price">{{ product.price }} $$</p>
+            </div>
+            <div class="button-container">
+              <button id="button" class="btn btn-outline-dark" type="button" @click.prevent="loadProduct(product.id)">Details</button>
+              <button
+                v-if="product.salesType === 'AUCTION'"
+                id="button"
+                class="btn btn-outline-dark"
+                type="button"
+                @click.prevent="openAuctionPopup(product)"
+              >
+                {{ bidPlacedProducts.includes(product.id) ? 'Bid Placed' : 'Place Bid' }}
+              </button>
+              <button
+                v-else
+                id="button"
+                class="btn btn-outline-dark"
+                type="button"
+                @click.prevent="purchaseProduct(product.id)"
+              >
+                {{ purchasedProducts.includes(product.id) ? 'Purchased' : 'Purchase' }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <ProductDetails
+        v-if="showProductModal"
+        :productId="selectedProductId"
+        @close="closeProductModal"
+      />
       <AuctionPopup
         v-if="showAuctionPopup"
         :show="showAuctionPopup"
@@ -62,11 +71,13 @@
 <script>
 import axios from 'axios';
 import AuctionPopup from './AuctionPopup.vue';
+import ProductDetails from './ProductDetails.vue';
 
 export default {
   name: 'HomePage',
   components: {
-    AuctionPopup
+    AuctionPopup,
+    ProductDetails
   },
   data() {
     return {
@@ -81,10 +92,12 @@ export default {
       error: '',
       categoryError: '',
       productFilterError: '',
-      purchasedProducts: JSON.parse(localStorage.getItem('purchasedProducts')) || [],
-      bidPlacedProducts: JSON.parse(localStorage.getItem('bidPlacedProducts')) || [],
       showAuctionPopup: false,
-      selectedProduct: null
+      showProductModal: false,
+      selectedProduct: null,
+      selectedProductId: null,
+      purchasedProducts: [],
+      bidPlacedProducts: []
     };
   },
   mounted() {
@@ -147,60 +160,50 @@ export default {
         });
         this.categories = categorySet.data;
       } catch (error) {
-        console.error('Error fetching categories:', error);
-        this.error = 'We encountered an issue while loading categories. Please try again later.';
+        console.error('Error extracting categories:', error);
       }
-    },
-    loadProduct(product) {
-      this.$router.push(`/products/${product.id}`);
     },
     filterProducts() {
-      this.productFilterError = '';
-      try {
-        const searchQuery = this.productSearchQuery.toLowerCase();
-        const minPrice = parseFloat(this.minPrice);
-        const maxPrice = parseFloat(this.maxPrice);
-        this.displayedProducts = this.products.filter(product => {
-          const matchesNameOrDescription = product.name.toLowerCase().includes(searchQuery) || product.description.toLowerCase().includes(searchQuery);
-          const matchesPriceRange = (!isNaN(minPrice) ? product.price >= minPrice : true) && (!isNaN(maxPrice) ? product.price <= maxPrice : true);
-          return matchesNameOrDescription && matchesPriceRange;
-        });
+      const min = parseFloat(this.minPrice);
+      const max = parseFloat(this.maxPrice);
 
-        if (this.displayedProducts.length === 0) {
-          this.productFilterError = 'No products match your criteria.';
-        }
-      } catch (error) {
-        console.error('Error filtering products:', error);
-        this.productFilterError = 'We encountered an issue while filtering products. Please try again later.';
+      if (isNaN(min) || isNaN(max) || min > max) {
+        this.productFilterError = 'Invalid price range. Please enter valid minimum and maximum prices.';
+        return;
       }
-    },
-    async purchaseProduct(productId) {
-      try {
-        await axios.post(`http://localhost:8181/api/purchase/${productId}`, {}, {
-          withCredentials: true
-        });
-        alert('Product purchased successfully!');
-        this.purchasedProducts.push(productId);
-        localStorage.setItem('purchasedProducts', JSON.stringify(this.purchasedProducts));
-      } catch (error) {
-        console.error('Error purchasing product:', error);
-        alert('We encountered an issue while purchasing the product. Please try again later.');
-      }
+
+      this.productFilterError = '';
+
+      this.displayedProducts = this.products.filter(product => {
+        const price = parseFloat(product.price);
+        return price >= min && price <= max && product.name.toLowerCase().includes(this.productSearchQuery.toLowerCase());
+      });
     },
     openAuctionPopup(product) {
-      this.selectedProduct = product;
-      this.showAuctionPopup = true;
+      if (this.bidPlacedProducts.includes(product.id)) {
+        alert('You have already placed a bid on this product.');
+      } else {
+        this.selectedProduct = product;
+        this.showAuctionPopup = true;
+      }
     },
     closeAuctionPopup() {
-      this.showAuctionPopup = false;
       this.selectedProduct = null;
+      this.showAuctionPopup = false;
     },
     handleBidPlaced(productId) {
       this.bidPlacedProducts.push(productId);
-      localStorage.setItem('bidPlacedProducts', JSON.stringify(this.bidPlacedProducts));
-      this.showAuctionPopup = false;
-      this.selectedProduct = null;
-      this.fetchProducts();
+    },
+    purchaseProduct(productId) {
+      this.purchasedProducts.push(productId);
+    },
+    loadProduct(productId) {
+      this.selectedProductId = productId;
+      this.showProductModal = true;
+    },
+    closeProductModal() {
+      this.selectedProductId = null;
+      this.showProductModal = false;
     }
   }
 };
@@ -215,22 +218,23 @@ html, body {
 
 #app {
   display: flex;
-  min-height: 100vh;
+  min-height: 100vh; /* Ensure the app takes at least the full viewport height */
 }
 
 #sidebar {
   width: 200px;
   background-color: pink;
   padding: 20px;
+  margin-top: 0.2%;
 }
 
 #main-content {
-  flex: 1;
+  flex: 1; /* Ensures the main content takes the remaining space */
   padding: 20px;
 }
 
 .search-input {
-  width: auto;
+  width:auto;
   padding: 10px;
   margin-bottom: 5px;
   font-size: 16px;
@@ -252,22 +256,56 @@ h1 {
 }
 
 .product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   border: 1px solid #ddd;
   padding: 20px;
   width: calc(33.333% - 40px);
   box-sizing: border-box;
   text-align: center;
   background-color: pink;
+  border-color: crimson;
+  border-style: solid;
+  border-width: 2.5px;
+  height: 550px; /* Set a fixed height for the product cards */
 }
 
 .product-card h2 {
   margin: 10px 0;
-  font-size: 20px;
+  font-size: 30px;
+  text-decoration: underline;
 }
 
-.product-card p {
+.product-card img {
+  border-color: crimson;
+  border-style: double;
+  width: 280px;
+  height: 300px;
+  background-color: lightgoldenrodyellow;
+  align-self: center;
+}
+
+.product-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-info p {
   margin: 10px 0;
-  font-size: 16px;
+  font-size: 15px;
+  text-align: left;
+}
+
+.product-info .price {
+  text-align: center; /* Center the price */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 
 .loading {
@@ -278,5 +316,13 @@ h1 {
 .error {
   font-size: 18px;
   color: red;
+}
+
+#button {
+  color: crimson;
+  background-color: lightyellow;
+  border-radius: 50%;
+  font-weight: bolder;  
+  border-color: crimson;
 }
 </style>
