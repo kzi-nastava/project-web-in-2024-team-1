@@ -24,23 +24,32 @@
           <div class="product-card" v-for="product in displayedProducts" :key="product.id">
             <h2>{{ product.name }}</h2>
             <img v-if="product.imagePath" :src="getProductImage(product.imagePath)" alt="Product Image" />
-            <p>Price: {{ product.price }}</p>
-            <p>Description: {{ product.description }}</p>
-            <button class="btn btn-outline-dark" type="button" @click.prevent="loadProduct(product)">
-              Details
-            </button>
+            <div class="product-info">
+              <p>Description: <br>{{ product.description }}</p>
+              <p class="price">{{ product.price }} $$</p>
+            </div>
+            <div class="button-container">
+              <button id="button" class="btn btn-outline-dark" type="button" @click.prevent="loadProduct(product)">
+                Details
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <product-details v-if="showModal" :productId="selectedProductId" @close="closeModal"></product-details>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import ProductDetails from './ProductDetails.vue';
 
 export default {
   name: 'HomePage',
+  components: {
+    ProductDetails
+  },
   data() {
     return {
       products: [],
@@ -52,8 +61,10 @@ export default {
       maxPrice: '',
       loading: false,
       error: '',
-      categoryError: '', // Added a new data property for category error
-      productFilterError: '' // Added a new data property for product filter error
+      categoryError: '',
+      productFilterError: '',
+      showModal: false,
+      selectedProductId: null
     };
   },
   mounted() {
@@ -103,12 +114,12 @@ export default {
         if (response.data && response.data.products) {
           this.displayedProducts = response.data.products;  
         } else {
-          this.categoryError = 'Category not found'; // Updated to use categoryError
+          this.categoryError = 'Category not found';
           this.displayedProducts = [];
         }
       } catch (error) {
         console.error('Error searching category:', error);
-        this.categoryError = 'Failed to search category'; // Updated to use categoryError
+        this.categoryError = 'Failed to search category';
         this.displayedProducts = [];
       } finally {
         this.loading = false;
@@ -126,10 +137,11 @@ export default {
       }
     },
     loadProduct(product) {
-      this.$router.push(`/products/${product.id}`);
+      this.selectedProductId = product.id;
+      this.showModal = true;
     },
     filterProducts() {
-      this.productFilterError = ''; // Reset product filter error
+      this.productFilterError = '';
       try {
         const searchQuery = this.productSearchQuery.toLowerCase();
         const minPrice = parseFloat(this.minPrice);
@@ -147,6 +159,10 @@ export default {
         console.error('Error filtering products:', error);
         this.productFilterError = 'Failed to filter products';
       }
+    },
+    closeModal() {
+      this.showModal = false;
+      this.selectedProductId = null;
     }
   }
 };
@@ -168,6 +184,7 @@ html, body {
   width: 200px;
   background-color: pink;
   padding: 20px;
+  margin-top: 0.2%;
 }
 
 #main-content {
@@ -198,22 +215,59 @@ h1 {
 }
 
 .product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   border: 1px solid #ddd;
   padding: 20px;
   width: calc(33.333% - 40px);
   box-sizing: border-box;
   text-align: center;
   background-color: pink;
+  border-color: crimson;
+  border-style: solid;
+  border-width: 2.5px;
+  height: 550px; /* Set a fixed height for the product cards */
 }
 
 .product-card h2 {
   margin: 10px 0;
-  font-size: 20px;
+  font-size: 30px;
+  text-decoration: underline;
 }
 
-.product-card p {
+.product-card img {
+  border-color: crimson;
+  border-style: double;
+  width: 280px;
+  height: 300px;
+  background-color: lightgoldenrodyellow;
+  align-self: center;
+}
+
+.product-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-info p {
   margin: 10px 0;
-  font-size: 16px;
+  font-size: 15px;
+  text-align: left;
+}
+
+.product-info .price {
+  text-align: center; /* Center the price */
+  font-weight:bold ;
+  color: darkred;
+  font-size: large;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 
 .loading {
@@ -224,5 +278,44 @@ h1 {
 .error {
   font-size: 18px;
   color: red;
+}
+
+#button {
+  color: crimson;
+  background-color: lightyellow;
+  border-radius: 50%;
+  font-weight: bolder;  
+  border-color: crimson;
+}
+
+/* Add styles for the modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }
 </style>
