@@ -1,10 +1,13 @@
 <template>
-  <h1>Login</h1>
-  <label for="username">Username:</label>
-  <input v-model="account.username" /><br />
-  <label for="password">Password:</label>
-  <input v-model="account.password" /><br />
-  <button v-on:click="login()">Login</button>
+  <div class="login-container">
+    <h1>Login</h1>
+    <label for="username">Username:</label>
+    <input v-model="account.username" /><br />
+    <label for="password">Password:</label>
+    <input v-model="account.password" /><br />
+    <button v-on:click="login()">Login</button>
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+  </div>
 </template>
 
 <script>
@@ -16,7 +19,8 @@ export default {
       account: {
             username: '',
             password: ''
-      }
+      },
+      errorMessage: ''
     };
   },
   methods: {
@@ -39,38 +43,49 @@ export default {
       })
       .catch(err => {
         console.error(err);
-        alert("Invalid username or password!");
+          if (err.response && err.response.status === 401) {
+            if (err.response.data === 'Invalid username') {
+              this.errorMessage = "Invalid username!";
+            } else if (err.response.data === 'Invalid password') {
+              this.errorMessage = "Invalid password!";
+            } else {
+              this.errorMessage = "Invalid username or password!";
+            }
+          } else {
+            this.errorMessage = "Error during login!";
+          }
       });
 
-      // fetch("http://localhost:8081/api/login", {
-      //   method: "POST",
-      //   credentials: "include",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-type": "application/json",
-      //   },
-      //   body: JSON.stringify(this.employee),
-      // })
-      //   .then((response) => response.json)
-      //   .then((data) => {
-      //     console.log("Success : " + data);
-      //     this.$router.push("/employees");
-      //   })
-      //   .catch((err) => {
-      //     console.log("Error : " + err);
-      //     alert(err);
-      //   });
+      
     },
   },
 };
 </script>
 
 <style scoped>
+.login-container {
+  border: 2px solid #000; 
+  padding: 20px; 
+  width: 300px; 
+  margin: auto; 
+  margin-top: 50px; 
+  border-radius: 10px; 
+  background-color: pink; 
+}
 label {
   display: block;
-  margin-top: 10px;
+  font-size: 25px;
 }
 button {
   margin-top: 10px;
+  width: 80px;
+  height: 30px;
+  font-size: 18px;
+}
+input {
+  width: 230px; /* Postavite širinu input polja */
+  font-size: 16px; /* Promenite veličinu fonta za input polje */
+  margin-top: 10px;
+  padding: 5px; /* Dodajte padding za bolji izgled */
 }
 </style>
