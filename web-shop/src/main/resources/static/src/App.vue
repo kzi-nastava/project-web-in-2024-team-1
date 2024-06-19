@@ -3,13 +3,25 @@
     <header>
       <div class="title">fake kupujem prodajem</div>
       <div class="nav-links">
-        <router-link to="/login">Login</router-link>
-        <router-link to="/register">Register</router-link>
+        <router-link v-if="showAuthLinks" to="/login">Login</router-link>
+        <router-link v-if="showAuthLinks" to="/register">Register</router-link>
+        <router-link v-if="!showAuthLinks" to="/profile">Profile</router-link>
       </div>
     </header>
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'App',
+  computed: {
+    showAuthLinks() {
+      return this.$route.name === 'home' || this.$route.name === 'login' || this.$route.name === 'register';
+    }
+  }
+}
+</script>
 
 <style>
 #app {

@@ -68,6 +68,7 @@ public class AccountController {
             return new ResponseEntity<>("Username or password not correct", HttpStatus.BAD_REQUEST);
         }
 
+
         try {
             Account account = accountService.login(loginDto);
             session.setAttribute("account", account);
