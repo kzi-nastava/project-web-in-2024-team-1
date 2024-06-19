@@ -1,59 +1,97 @@
 <template>
-    <div class="hello">
-      <h1>{{  }}</h1>
-      <p>
-        For a guide and recipes on how to configure / customize this project,<br>
-        check out the
-        <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-      </p>
-      <h3>Installed CLI Plugins</h3>
-      <ul>
-        <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-        <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      </ul>
-      <h3>Essential Links</h3>
-      <ul>
-        <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-        <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-        <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-        <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-        <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-      </ul>
-      <h3>Ecosystem</h3>
-      <ul>
-        <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-        <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-        <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-        <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-        <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-      </ul>
+  <div id="products">
+    <h1>Products</h1>
+    <div v-if="error" class="error">{{ error }}</div>
+    <div v-if="loading" class="loading">Loading...</div>
+    <div class="product-grid" v-if="products.length">
+      <div class="product-card" v-for="product in products" :key="product.id">
+        <h2>{{ product.name }}</h2>
+        <p>Price: {{ product.price }}</p>
+        <p>Description: {{ product.description }}</p>
+        <button class="btn btn-outline-dark" type="button" @click.prevent="loadProduct(product)">
+          Details
+        </button>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'HomePage',
-    props: {
-      msg: String
+  </div>
+</template>
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'HomePage',
+  data() {
+    return {
+      products: [],
+      loading: false,
+      error: ''
+    };
+  },
+  mounted() {
+    this.fetchProducts();
+  },
+  methods: {
+    async fetchProducts() {
+      this.loading = true;
+      try {
+        const response = await axios.get('http://localhost:8181/api/products', {
+          withCredentials: true
+        });
+        this.products = response.data;
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        if (error.response) {
+          const errorMessage = error.response.data.message || 'An error occurred while fetching the products';
+          this.error = `Failed to load products: ${errorMessage}`;
+        } else {
+          this.error = 'Failed to load products: Network Error';
+        }
+      } finally {
+        this.loading = false;
+      }
+    },
+    loadProduct(product) {
+      this.$router.push(`/products/${product.id}`);
     }
   }
-  </script>
-  
-  <!-- Add "scoped" attribute to limit CSS to this component only -->
-  <style scoped>
-  h3 {
-    margin: 40px 0 0;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+#products {
+  padding: 20px;
+  align-items: center;
+}
+h1 {
+  margin: 20px 0;
+}
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+.product-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  width: calc(33.333% - 40px);
+  box-sizing: border-box;
+  text-align: center;
+  background-color: pink;
+}
+.product-card h2 {
+  margin: 10px 0;
+  font-size: 20px;
+}
+.product-card p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+.loading {
+  font-size: 18px;
+  color: #888;
+}
+.error {
+  font-size: 18px;
+  color: red;
+}
+</style>
