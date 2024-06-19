@@ -6,6 +6,7 @@
     <div class="product-grid" v-if="products.length">
       <div class="product-card" v-for="product in products" :key="product.id">
         <h2>{{ product.name }}</h2>
+        <img v-if="product.imagePath" :src="getProductImage(product.imagePath)" alt="Product Image" />
         <p>Price: {{ product.price }}</p>
         <p>Description: {{ product.description }}</p>
         <button class="btn btn-outline-dark" type="button" @click.prevent="loadProduct(product)">
@@ -31,6 +32,10 @@ export default {
     this.fetchProducts();
   },
   methods: {
+    getProductImage(imagePath) {
+      // Adjust the path based on where your images are located
+      return require(`@/assets/${imagePath}`);
+    },
     async fetchProducts() {
       this.loading = true;
       try {
