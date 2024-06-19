@@ -45,7 +45,7 @@ public class ProductController
         return ResponseEntity.ok(productDtoList);
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("product/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long id) {
         Product product = productService.findOne(id);
         if (product == null) {
