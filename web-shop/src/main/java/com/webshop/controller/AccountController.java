@@ -67,6 +67,7 @@ public class AccountController {
         if(loginDto.getUsername().isEmpty() || loginDto.getPassword().isEmpty()) {
             return new ResponseEntity<>("Username or password not correct", HttpStatus.BAD_REQUEST);
         }
+        
 
         try {
             Account account = accountService.login(loginDto);
