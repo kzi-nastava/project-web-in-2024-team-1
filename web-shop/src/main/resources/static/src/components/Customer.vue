@@ -301,6 +301,9 @@ h1 {
 
 .product-info .price {
   text-align: center; /* Center the price */
+  font-weight:bold ;
+  color: darkred;
+  font-size: large;
 }
 
 .button-container {
