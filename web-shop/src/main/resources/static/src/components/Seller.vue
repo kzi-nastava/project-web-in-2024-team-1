@@ -4,7 +4,7 @@
         <h2>Categories</h2>
         <div class="search-category">
           <input v-model="searchQuery" placeholder="Search Category" />
-          <button @click="searchCategory" class="btn btn-outline-dark">Search</button>
+          <button @click="searchCategory" class="btn btn-outline-dark">🔍</button>
           <div v-if="categoryError" class="error">{{ categoryError }}</div>
         </div>
         <ul>
@@ -180,6 +180,7 @@
     padding: 10px;
     margin-bottom: 5px;
     font-size: 16px;
+    
   }
   
   #products {

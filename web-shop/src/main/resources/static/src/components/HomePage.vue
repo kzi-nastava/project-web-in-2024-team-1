@@ -3,19 +3,23 @@
     <div id="sidebar">
       <h2>Categories</h2>
       <div class="search-category">
-        <input v-model="searchQuery" placeholder="Search Category" />
-        <button @click="searchCategory" class="btn btn-outline-dark">Search</button>
+        <div class="input-button-wrapper">
+          <input v-model="searchQuery" placeholder="Search Category" />
+          <button style="color: crimson; background-color: lightyellow; border-radius: 50%; font-weight: bolder; border-color: crimson;" @click="searchCategory" class="btn btn-outline-dark">🔍</button>
+        </div>
         <div v-if="categoryError" class="error">{{ categoryError }}</div>
       </div>
-      <ul>
-        <li v-for="category in categories" :key="category.id">{{ category.categoryName }}</li>
-      </ul>
+      <ul style="margin-left: -25px;">
+  <li style="text-align: left;" v-for="category in categories" :key="category.id" @click="filterByCategory(category.categoryName)">
+    {{ category.categoryName }}
+  </li>
+     </ul>
     </div>
     <div id="main-content">
       <input v-model="productSearchQuery" placeholder="Search Products..." class="search-input"/>
       <input v-model="minPrice" type="number" placeholder="Min Price" class="search-input"/>
       <input v-model="maxPrice" type="number" placeholder="Max Price" class="search-input"/>
-      <button @click="filterProducts" class="btn btn-outline-dark">Filter</button>
+      <button style="font-size: 20px; color: crimson; background-color: lightyellow; border-radius: 50%; font-weight: bolder; border-color: crimson;" @click="filterProducts" class="btn btn-outline-dark">🧐</button>
       <div v-if="productFilterError" class="error">{{ productFilterError }}</div>
       <div id="products">
         <div v-if="error" class="error">{{ error }}</div>
@@ -82,7 +86,7 @@ export default {
           withCredentials: true
         });
         this.products = response.data;
-        this.displayedProducts = this.products; 
+        this.displayedProducts = this.products;
       } catch (error) {
         console.error('Error fetching products:', error);
         if (error.response) {
@@ -98,7 +102,7 @@ export default {
     async searchCategory() {
       if (!this.searchQuery) {
         this.categoryError = '';
-        this.displayedProducts = this.products;  
+        this.displayedProducts = this.products;
         return;
       }
 
@@ -112,7 +116,7 @@ export default {
         });
 
         if (response.data && response.data.products) {
-          this.displayedProducts = response.data.products;  
+          this.displayedProducts = response.data.products;
         } else {
           this.categoryError = 'Category not found';
           this.displayedProducts = [];
@@ -160,6 +164,31 @@ export default {
         this.productFilterError = 'Failed to filter products';
       }
     },
+    async filterByCategory(categoryName) {
+  this.loading = true;
+  this.categoryError = '';
+
+  try {
+    const response = await axios.get('http://localhost:8181/api/category/category-with-products', {
+      params: { categoryName: categoryName },
+      withCredentials: true
+    });
+
+    if (response.data && response.data.products) {
+      this.displayedProducts = response.data.products;
+    } else {
+      this.categoryError = 'No products found for this category';
+      this.displayedProducts = [];
+    }
+  } catch (error) {
+    console.error('Error fetching category products:', error);
+    this.categoryError = 'Failed to load category products';
+    this.displayedProducts = [];
+  } finally {
+    this.loading = false;
+  }
+}
+,
     closeModal() {
       this.showModal = false;
       this.selectedProductId = null;
@@ -192,11 +221,41 @@ html, body {
   padding: 20px;
 }
 
+.search-category {
+  margin-bottom: 20px; /* Add some space below the search category section */
+}
+
+.input-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content:flex-end; /* Align items to the start (left) */
+  margin-right: -15px;
+}
+
+.input-button-wrapper input {
+  flex: 1;
+  margin-right: 5px; /* Add space between the input and button */
+  border: crimson;
+  border-style: solid;
+    border-width: 2px;
+}
+
+.input-button-wrapper button {
+  flex-shrink: 0; /* Prevent the button from shrinking */
+}
+
+#sidebar input, #sidebar button {
+  font-size: 15px;
+}
+
 .search-input {
-  width:auto;
-  padding: 10px;
-  margin-bottom: 5px;
+  width:150px;
+  padding: 5px;
   font-size: 16px;
+  margin: 5px;
+  border: crimson;
+    border-style: solid;
+    border-width: 2px;
 }
 
 #products {
@@ -288,34 +347,4 @@ h1 {
   border-color: crimson;
 }
 
-/* Add styles for the modal */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 600px;
-}
-
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
 </style>
