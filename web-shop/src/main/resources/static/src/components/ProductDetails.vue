@@ -4,12 +4,11 @@
     <div v-if="error" class="error">{{ error }}</div>
     <div v-if="loading" class="loading">Loading...</div>
     <div v-if="product">
+      <img v-if="product.imagePath" :src="getProductImage(product.imagePath)" alt="Product Image" />
       <p>Price: {{ product.price }}</p>
       <p>Description: {{ product.description }}</p>
       <p>Category: {{ product.categoryName }}</p>
       <p>Sales Type: {{ product.salesType }}</p>
-      <img v-if="product.imagePath" :src="getProductImage(product.imagePath)" alt="Product Image" />
-      <!-- Add more fields as needed -->
     </div>
   </div>
 </template>
@@ -30,7 +29,6 @@ export default {
   },
   methods: {
     getProductImage(imagePath) {
-      // Adjust the path based on where your images are located
       return require(`@/assets/${imagePath}`);
     },
     fetchProduct() {
