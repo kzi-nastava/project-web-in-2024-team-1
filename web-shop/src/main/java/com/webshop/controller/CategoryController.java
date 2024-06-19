@@ -29,11 +29,11 @@ public class CategoryController
 
     @GetMapping("getByName")
     public ResponseEntity<?> searchCategoryByName(@RequestParam String categoryName) {
-       Optional<Category> category = categoryService.findByCategoryName(categoryName);
-        if (category.isPresent()) {
-            return ResponseEntity.ok(category.get());
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            CategoryDto categoryDto = categoryService.getCategoryWithProducts(categoryName);
+            return ResponseEntity.ok(categoryDto);
+        } catch (CategoryNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
     //all categories with products
@@ -49,7 +49,6 @@ public class CategoryController
         return ResponseEntity.ok(categoryDto);
     }
 
-
     @PostMapping("create-category")
     public ResponseEntity<String>createCategory(@RequestBody CreateCategoryDto createCategoryDto, HttpSession session){
         Account account = (Account) session.getAttribute("account");
@@ -64,4 +63,5 @@ public class CategoryController
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 }
