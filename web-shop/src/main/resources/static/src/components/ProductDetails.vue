@@ -8,8 +8,7 @@
       <p>Description: {{ product.description }}</p>
       <p>Category: {{ product.categoryName }}</p>
       <p>Sales Type: {{ product.salesType }}</p>
-      <img v-if="product.imagePath" :src="product.imagePath" alt="Product Image" />
-
+      <img v-if="product.imagePath" :src="getProductImage(product.imagePath)" alt="Product Image" />
       <!-- Add more fields as needed -->
     </div>
   </div>
@@ -25,10 +24,15 @@ export default {
       error: ''
     };
   },
+  
   mounted() {
     this.fetchProduct();
   },
   methods: {
+    getProductImage(imagePath) {
+      // Adjust the path based on where your images are located
+      return require(`@/assets/${imagePath}`);
+    },
     fetchProduct() {
       const productId = this.$route.params.id;
       this.loading = true;
