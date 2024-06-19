@@ -1,19 +1,48 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomePageView from '../views/HomePageView.vue'
+import LoginView from '../views/LoginView.vue'
+
+import AdminView from '../views/AdminView.vue'
+import SellerView from '../views/SellerView.vue'
+import CustomerView from '../views/CustomerView.vue'
+import RegisterView from '../views/RegisterView.vue'
+import ProductDetails from '@/components/ProductDetails.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomePageView
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminView
+  },
+  {
+    path: '/seller',
+    name: 'seller',
+    component: SellerView
+  },
+  {
+    path: '/customer',
+    name: 'customer',
+    component: CustomerView
+  },
+  {
+    path: '/products/:id',
+    name: 'ProductDetails',
+    component: ProductDetails
   }
 ]
 

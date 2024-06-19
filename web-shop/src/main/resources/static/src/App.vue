@@ -1,9 +1,14 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <header>
+      <div class="title">fake kupujem prodajem</div>
+      <div class="nav-links">
+        <router-link to="/login">Login</router-link>
+        <router-link to="/register">Register</router-link>
+      </div>
+    </header>
+    <router-view/>
+  </div>
 </template>
 
 <style>
@@ -13,6 +18,20 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: pink;
+  color: darkpink;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 24px;
 }
 
 nav {
