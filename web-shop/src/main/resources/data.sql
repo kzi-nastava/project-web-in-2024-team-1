@@ -12,16 +12,16 @@ VALUES
 
 INSERT INTO CATEGORY(category_name)
 VALUES
-    ('prva kategorija'),
-    ('druga kategorija'),
-    ('treca kategorija');
+    ('Accessories'),
+    ('Fruits'),
+    ('Footwear');
 
 
-INSERT INTO PRODUCT (name, description, image_path, price, sales_type, release_date, category_id, customer_review, seller_review, is_sold, product_type,buyer_id,seller_id)
+INSERT INTO PRODUCT (name, description, image_path, price, sales_type, release_date, category_id, customer_review, seller_review, is_sold, product_type, buyer_id, seller_id)
 VALUES
-    ('Product1', 'Description for Product1', 'slika1.jpg', 100.0, 'FIXED_PRICE', '2024-01-01', 1, TRUE, TRUE, FALSE, 'FOR_SALE',null,1),
-    ('Product2', 'Description for Product2', 'slika2.jpg', 200.0, 'AUCTION', '2024-02-01', 2, FALSE, TRUE, FALSE, 'FOR_SALE',null,1),
-    ('Product3', 'Description for Product3', 'slika3.jpg', 150.0, 'FIXED_PRICE', '2024-03-01', 3, TRUE, TRUE, FALSE, 'FOR_SALE',null,1);
+    ('Handbag', 'A stylish and compact handbag perfect for both casual outings and formal events. Crafted from high-quality materials.', 'bag.png', 100.0, 'FIXED_PRICE', '2024-01-01', 1, TRUE, TRUE, FALSE, 'FOR_SALE', null, 1),
+    ('Pineapple', 'A premium quality pineapple, known for its sweet and tangy flavor. This tropical fruit is packed with vitamins, minerals, and antioxidants.', 'pinaple.png', 200.0, 'AUCTION', '2024-02-01', 2, FALSE, TRUE, FALSE, 'FOR_SALE', null, 1),
+    ('High heels', 'Chic and sophisticated high heels that add a touch of glamour to any outfit.', 'heels.png', 150.0, 'FIXED_PRICE', '2024-03-01', 3, TRUE, TRUE, FALSE, 'FOR_SALE', null, 1);
 
 INSERT INTO PRODUCT_OFFERS (product_id, offer_id)
 VALUES
